@@ -1,0 +1,19 @@
+package isi.deso.Repository;
+
+import isi.deso.model.ItemMenu;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ItemMenuDAO extends JpaRepository<ItemMenu, Integer> {
+
+    // Buscar todos los items de menú
+    List<ItemMenu> findAll();
+
+    boolean existsByNombre(String nombre);
+    // Consultar item por su id (lo hace JpaRepository automáticamente con
+    // findById())
+    // Optional<ItemMenu> findById(Integer id);
+}
