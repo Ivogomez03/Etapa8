@@ -1,18 +1,19 @@
 package isi.deso.Servicio;
 
-import isi.deso.model.Bebida;
+import isi.deso.DTO.ItemMenuDTO;
 import isi.deso.model.ItemMenu;
-import isi.deso.model.Plato;
 
 import java.util.List;
 
 public interface IItemMenuServicio {
 
     // Crear o actualizar un ItemMenu
-    public void crearItemMenu(ItemMenu itemMenu);
+    public void agregarItem(ItemMenuDTO itemMenu);
+
+    public ItemMenuDTO convertirAimDTO(ItemMenu itemMenu);
 
     // Obtener todos los items de menú
-    public List<ItemMenu> obtenerTodosLosItems();
+    public List<ItemMenuDTO> obtenerTodosLosItems();
 
     // Eliminar un ItemMenu por ID
     public void eliminarItemMenu(Integer id);
@@ -20,15 +21,15 @@ public interface IItemMenuServicio {
     // Buscar un ItemMenu por ID
     public ItemMenu obtenerItemPorId(Integer id);
 
-    public List<Plato> obtenerPlatos(String dniVendedor);
+    public List<ItemMenuDTO> obtenerPlatos(String dniVendedor);
 
-    public List<Plato> obtenerPlatosSinTACC(String dniVendedor);
+    public List<ItemMenuDTO> obtenerPlatosSinTACC(String dniVendedor);
 
-    public Plato obtenerPlato(String nombre);
+    public ItemMenuDTO obtenerPlato(String nombre);
 
-    public List<Bebida> obtenerBebidasSinAlcohol(String dniVendedor);
+    public List<ItemMenuDTO> obtenerBebidasSinAlcohol(String dniVendedor);
 
-    public List<Bebida> obtenerBebidasConAlcohol(String dniVendedor);
+    public List<ItemMenuDTO> obtenerBebidasConAlcohol(String dniVendedor);
 
-    public Bebida obtenerBebida(String nombre);
+    public ItemMenuDTO obtenerBebida(String nombre);
 }

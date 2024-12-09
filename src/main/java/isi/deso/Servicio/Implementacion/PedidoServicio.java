@@ -8,6 +8,7 @@ import isi.deso.Repository.ItemMenuDAO;
 import isi.deso.DTO.ItemsPedidoDTO;
 import isi.deso.DTO.PedidoDTO;
 import isi.deso.model.Cliente;
+import isi.deso.model.Estado;
 import isi.deso.model.ItemMenu;
 import isi.deso.model.ItemsPedido;
 import isi.deso.model.Pago;
@@ -42,7 +43,7 @@ public class PedidoServicio implements IPedidoServicio {
         pedido.setPago(pago);
         pedido.setCliente(cliente);
         pedido.setVendedor(vendedor);
-
+        pedido.setEstado(Estado.PENDIENTE);
         for (ItemsPedidoDTO dto : pedidoDTO.getDetalle()) {
             ItemMenu itemMenu = itemMenuDAO.findById(dto.getId_item())
                     .orElseThrow(() -> new RuntimeException("ItemMenu no encontrado"));
@@ -56,7 +57,11 @@ public class PedidoServicio implements IPedidoServicio {
         }
 
         // Llamar al DAO para persistir el pedido en la base de datos
-        pedidoDAO.save(pedido);
+        try {
+            pedidoDAO.save(pedido);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error al guardar el pedido");
+        }
     }
 
 }

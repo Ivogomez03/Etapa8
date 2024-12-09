@@ -5,8 +5,7 @@
 package isi.deso.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,7 @@ import java.util.List;
  *
  * @author ivogo
  */
-@Getter
-@Setter
+@Data
 @Entity
 public class Pedido {
     @Id
@@ -44,7 +42,7 @@ public class Pedido {
 
     public Pedido() {
         this.estado = Estado.PENDIENTE;
-        this.detalle = new ArrayList();
+        this.detalle = new ArrayList<ItemsPedido>();
     }
 
 }

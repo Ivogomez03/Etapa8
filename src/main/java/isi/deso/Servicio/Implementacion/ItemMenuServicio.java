@@ -8,11 +8,11 @@ import isi.deso.DTO.ItemMenuDTO;
 import isi.deso.model.Bebida;
 import isi.deso.model.ItemMenu;
 import isi.deso.model.Plato;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemMenuServicio implements IItemMenuServicio {
@@ -22,31 +22,69 @@ public class ItemMenuServicio implements IItemMenuServicio {
     private PlatoDAO platoDAO;
     private BebidaDAO bebidaDAO;
 
-    // Crear o actualizar un ItemMenu
-    public void crearItemMenu(ItemMenu itemMenu) {
-        itemMenuDAO.save(itemMenu);
-    }
-
     public void agregarItem(ItemMenuDTO itemDTO) {
         if (itemDTO.getTipo().equals("Plato")) {
             Plato plato = new Plato(itemDTO.getNombre(), itemDTO.getDesc(), itemDTO.getCategoria(), itemDTO.getPrecio(),
                     itemDTO.getCalorias(), itemDTO.isAptoCeliaco(), itemDTO.isAptoVegetariano(),
                     itemDTO.isEsVegano(), itemDTO.getVendedor());
+            try {
+                platoDAO.save(plato);
+            } catch (DataIntegrityViolationException e) {
+                throw new RuntimeException("Error al guardar el plato", e);
+            }
 
-            platoDAO.save(plato);
-            // persistir
         } else {
             Bebida bebida = new Bebida(itemDTO.getNombre(), itemDTO.getDesc(), itemDTO.getCategoria(),
                     itemDTO.getPrecio(), itemDTO.getTamanioBebida(), itemDTO.getGradAlcohol(), itemDTO.isEsVegano(),
                     itemDTO.getVendedor());
-            bebidaDAO.save(bebida);
-            // persistir
+
+            try {
+                bebidaDAO.save(bebida);
+            } catch (DataIntegrityViolationException e) {
+                throw new RuntimeException("Error al guardar el plato", e);
+            }
+
         }
     }
 
     // Obtener todos los items de menú
-    public List<ItemMenu> obtenerTodosLosItems() {
-        return itemMenuDAO.findAll();
+    public List<ItemMenuDTO> obtenerTodosLosItems() {
+        List<ItemMenu> items = itemMenuDAO.findAll();
+
+        if (items.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron items.");
+        }
+        return items.stream()
+                .map(this::convertirAimDTO)
+                .collect(Collectors.toList());
+
+    }
+
+    public ItemMenuDTO convertirAimDTO(ItemMenu itemMenu) {
+        ItemMenuDTO itemMenuDTO = new ItemMenuDTO();
+        itemMenuDTO.setNombre(itemMenu.getNombre());
+        itemMenuDTO.setCategoria(itemMenu.getCategoria());
+        itemMenuDTO.setPrecio(itemMenu.getPrecio());
+        itemMenuDTO.setDesc(itemMenu.getDescripcion());
+        itemMenuDTO.setEsVegano(itemMenu.getAptoVegano());
+        itemMenuDTO.setVendedor(itemMenu.getVendedor());
+        if (itemMenu instanceof Bebida) {
+            Bebida bebida = (Bebida) itemMenu;
+            itemMenuDTO.setGradAlcohol(bebida.getGraduacionAlcohol());
+            itemMenuDTO.setTamanioBebida(bebida.getTamanio());
+
+            itemMenuDTO.setEsVegano(bebida.getAptoVegano());
+
+        }
+        if (itemMenu instanceof Plato) {
+            Plato plato = (Plato) itemMenu;
+            itemMenuDTO.setTipo("Plato");
+            itemMenuDTO.setAptoCeliaco(plato.isAptoCeliaco());
+            itemMenuDTO.setAptoVegetariano(plato.isAptoVegetariano());
+            itemMenuDTO.setCalorias(plato.getCalorias());
+        }
+        return itemMenuDTO;
+
     }
 
     // Eliminar un ItemMenu por ID
@@ -59,27 +97,58 @@ public class ItemMenuServicio implements IItemMenuServicio {
         return itemMenuDAO.findById(id).orElse(null);
     }
 
-    public List<Plato> obtenerPlatos(String dniVendedor) {
-        return platoDAO.obtenerPlatosPorVendedor(dniVendedor);
+    public List<ItemMenuDTO> obtenerPlatos(String dniVendedor) {
+        List<Plato> platos = platoDAO.obtenerPlatosPorVendedor(dniVendedor);
+        if (platos.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron platos del vendedor con dni " + dniVendedor);
+        }
+        return platos.stream()
+                .map(this::convertirAimDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Plato> obtenerPlatosSinTACC(String dniVendedor) {
-        return platoDAO.obtenerPlatosSinTACC(dniVendedor);
+    public List<ItemMenuDTO> obtenerPlatosSinTACC(String dniVendedor) {
+        List<Plato> platos = platoDAO.obtenerPlatosSinTACC(dniVendedor);
+        if (platos.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron platos del vendedor con dni " + dniVendedor);
+        }
+        return platos.stream()
+                .map(this::convertirAimDTO)
+                .collect(Collectors.toList());
     }
 
-    public Plato obtenerPlato(String nombre) {
-        return platoDAO.obtenerPlato(nombre);
+    public ItemMenuDTO obtenerPlato(String nombre) {
+        Plato plato = platoDAO.obtenerPlato(nombre);
+        if (plato == null)
+            throw new RuntimeException("Error al encontrar el plato con nombre " + nombre);
+        return convertirAimDTO(plato);
     }
 
-    public List<Bebida> obtenerBebidasSinAlcohol(String dniVendedor) {
-        return bebidaDAO.findBebidasSinAlcohol(dniVendedor);
+    public List<ItemMenuDTO> obtenerBebidasSinAlcohol(String dniVendedor) {
+        List<Bebida> bebidas = bebidaDAO.findBebidasSinAlcohol(dniVendedor);
+        if (bebidas.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron bebidas del vendedor con dni " + dniVendedor);
+        }
+        return bebidas.stream()
+                .map(this::convertirAimDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Bebida> obtenerBebidasConAlcohol(String dniVendedor) {
-        return bebidaDAO.findBebidasConAlcohol(dniVendedor);
+    public List<ItemMenuDTO> obtenerBebidasConAlcohol(String dniVendedor) {
+        List<Bebida> bebidas = bebidaDAO.findBebidasConAlcohol(dniVendedor);
+        if (bebidas.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron bebidas del vendedor con dni " + dniVendedor);
+        }
+        return bebidas.stream()
+                .map(this::convertirAimDTO)
+                .collect(Collectors.toList());
     }
 
-    public Bebida obtenerBebida(String nombre) {
-        return bebidaDAO.findByNombre(nombre);
+    public ItemMenuDTO obtenerBebida(String nombre) {
+        Bebida bebida = bebidaDAO.findByNombre(nombre);
+        if (bebida == null)
+            throw new RuntimeException("Error al encontrar la bebida con nombre " + nombre);
+        return convertirAimDTO(bebida);
+
     }
 }

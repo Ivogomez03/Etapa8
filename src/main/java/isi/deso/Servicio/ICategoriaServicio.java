@@ -1,7 +1,6 @@
 package isi.deso.Servicio;
 
 import isi.deso.model.Categoria;
-import isi.deso.model.TipoDeItem;
 import java.util.List;
 import isi.deso.DTO.CategoriaDTO;
 

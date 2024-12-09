@@ -1,6 +1,5 @@
 package isi.deso.Servicio.Implementacion;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import isi.deso.Repository.ClienteDAO;
 import isi.deso.exception.ItemNoEncontradoException;
 import isi.deso.model.Cliente;
 import isi.deso.model.ItemsPedido;
-import isi.deso.model.Pedido;
 import isi.deso.model.Vendedor;
 
 public class ItemsPedidoServicio {

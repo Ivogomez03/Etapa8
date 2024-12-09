@@ -22,6 +22,7 @@ public class ValidationServicio implements IValidationServicio {
 
     // Validar si el vendedor existe en la base de datos
     public boolean vendedorExists(String dni) {
+
         return vendedorDAO.existsByDni(dni);
     }
 
