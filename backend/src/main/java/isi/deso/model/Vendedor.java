@@ -37,6 +37,9 @@ public class Vendedor {
     @Column(name = "DNI")
     private String dni;
 
+    @Column(name = "habilitado")
+    private boolean habilitado;
+
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_coordenadas", referencedColumnName = "id_coordenadas")
     private Coordenada coordenadas;

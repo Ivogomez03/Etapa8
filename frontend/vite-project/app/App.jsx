@@ -1,8 +1,18 @@
 import React from 'react';
 import './App.css'
 import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import BienvenidoVendedor from './Vendedor/BienvenidoVendedor';
+import RegistrarVendedor from './Vendedor/Registrar/RegistrarVendedor';
+import BuscarVendedor from './Vendedor/Buscar/BuscarVendedor';
+import VendedorBuscado from './Vendedor/Buscar/VendedorBuscado';
+import ModificarVendedor from './Vendedor/Modificar/ModificarVendedor';
+import EliminarVendedor from './Vendedor/Eliminar/EliminarVendedor';
 const App = () => {
     console.log("App cargado correctamente");
+    const navigate = useNavigate();
+    const goToBienvenidoVendedor = () => {
+        navigate('/bienvenidoVendedor');
+    }
     return (
         <div className='conteiner-App'>
             <header>
@@ -12,7 +22,7 @@ const App = () => {
                 <img src="/comida.jpg" alt="" />
                 <div className='seccion-botones-app'>
                     <div className='sub-seccion-botones-app'>
-                        <button className="botones-navegacion">
+                        <button className="botones-navegacion" onClick={goToBienvenidoVendedor}>
                             Vendedores
                         </button>
                         <button className="botones-navegacion">
@@ -89,6 +99,13 @@ const MainApp = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<App />} />
+                <Route path="/bienvenidoVendedor" element={<BienvenidoVendedor />} />
+                <Route path="/bienvenidoVendedor/RegistrarVendedor" element={<RegistrarVendedor />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor" element={<BuscarVendedor />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor/VendedorBuscado" element={<VendedorBuscado />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor/ModificarVendedor" element={<ModificarVendedor />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor/EliminarVendedor" element={<EliminarVendedor />} />
+
 
             </Routes>
         </Router>

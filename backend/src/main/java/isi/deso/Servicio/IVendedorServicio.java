@@ -10,9 +10,11 @@ public interface IVendedorServicio {
 
     public VendedorDTO buscarVendedor(String dni);
 
+    public void modificarVendedor(VendedorDTO vendedor);
+
     public List<VendedorDTO> obtenerTodosLosVendedores();
 
-    public void eliminarVendedor(Integer id);
+    public void eliminarVendedor(String dni);
 
     public Vendedor buscarVendedorEntidad(String dni);
 

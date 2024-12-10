@@ -18,6 +18,7 @@ public interface VendedorDAO extends JpaRepository<Vendedor, Integer> {
     Vendedor buscarVendedorPorDni(@Param("dni") String dni);
 
     // Obtener todos los vendedores (ya proporcionado por JpaRepository)
+    @Query("SELECT v FROM Vendedor v WHERE v.habilitado = true")
     List<Vendedor> findAll();
 
     // Eliminar un vendedor por ID (ya incluido con JpaRepository)

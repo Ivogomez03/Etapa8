@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.management.RuntimeErrorException;
+
 @Service
 public class VendedorServicio implements IVendedorServicio {
 
@@ -19,6 +21,8 @@ public class VendedorServicio implements IVendedorServicio {
     public void crearVendedor(VendedorDTO vendedorDTO) {
         Vendedor vendedor = new Vendedor(vendedorDTO.getNombre(), vendedorDTO.getApellido(), vendedorDTO.getDireccion(),
                 vendedorDTO.getDni(), vendedorDTO.getLatitud(), vendedorDTO.getLongitud(), vendedorDTO.getItems());
+
+        vendedor.setHabilitado(true);
         try {
             vendedorDAO.save(vendedor);
 
@@ -27,6 +31,22 @@ public class VendedorServicio implements IVendedorServicio {
             throw new RuntimeException("Error al guardar el vendedor", e);
         }
 
+    }
+
+    public void modificarVendedor(VendedorDTO vendedorDTO) {
+
+        Vendedor vendedor = vendedorDAO.buscarVendedorPorDni(vendedorDTO.getDni());
+        if (vendedor == null || !vendedor.isHabilitado()) {
+            throw new RuntimeException("No se ha encontrado el vendedor con dni proporcionado");
+        }
+        vendedor.setNombre(vendedorDTO.getNombre());
+        vendedor.setApellido(vendedorDTO.getApellido());
+        vendedor.setCoordenada(vendedorDTO.getLatitud(), vendedorDTO.getLongitud());
+        try {
+            vendedorDAO.save(vendedor);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error al modificar el vendedor");
+        }
     }
 
     public VendedorDTO convertirAvendedorDto(Vendedor vendedor) {
@@ -44,7 +64,7 @@ public class VendedorServicio implements IVendedorServicio {
 
     public Vendedor buscarVendedorEntidad(String dni) {
         Vendedor vendedor = vendedorDAO.buscarVendedorPorDni(dni);
-        if (vendedor == null) {
+        if (vendedor == null || !vendedor.isHabilitado()) {
             throw new IllegalArgumentException("No se encontró un vendedor con el DNI proporcionado.");
         }
         return vendedor;
@@ -52,7 +72,7 @@ public class VendedorServicio implements IVendedorServicio {
 
     public VendedorDTO buscarVendedor(String dni) {
         Vendedor vendedor = vendedorDAO.buscarVendedorPorDni(dni);
-        if (vendedor == null)
+        if (vendedor == null || !vendedor.isHabilitado())
             throw new IllegalArgumentException("No se ha encontrado el vendedor con el dni " + dni);
 
         return convertirAvendedorDto(vendedor);
@@ -68,7 +88,12 @@ public class VendedorServicio implements IVendedorServicio {
                 .collect(Collectors.toList());
     }
 
-    public void eliminarVendedor(Integer id) {
-        vendedorDAO.deleteById(id);
+    public void eliminarVendedor(String dni) {
+        Vendedor vendedor = vendedorDAO.buscarVendedorPorDni(dni);
+        if (vendedor == null) {
+            throw new RuntimeException("No se ha encontrado el vendedor con el dni " + dni);
+        }
+        vendedor.setHabilitado(false);
+        vendedorDAO.save(vendedor);
     }
 }
