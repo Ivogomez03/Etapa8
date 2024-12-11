@@ -13,6 +13,7 @@ import ClienteBuscado from './Cliente/Buscar/ClienteBuscado';
 import BuscarCliente from './Cliente/Buscar/BuscarCliente';
 import EliminarCliente from './Cliente/Eliminar/EliminarCliente';
 import ModificarCliente from './Cliente/Modificar/ModificarCliente';
+import RegistrarItems from './ItemMenu/Registrar/RegistrarItems';
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
     const goToBienvenidoCliente = () => {
         navigate('/bienvenidoCliente');
     }
+
     return (
         <div className='conteiner-App'>
             <header>
@@ -42,9 +44,6 @@ const App = () => {
                         </button>
                     </div>
                     <div className='sub-seccion-botones-app'>
-                        <button className="botones-navegacion">
-                            Items Menú
-                        </button>
                         <button className="botones-navegacion">
                             Pedidos
                         </button>
@@ -113,6 +112,7 @@ const MainApp = () => {
                 <Route path="/" element={<App />} />
                 <Route path="/bienvenidoVendedor" element={<BienvenidoVendedor />} />
                 <Route path="/bienvenidoVendedor/RegistrarVendedor" element={<RegistrarVendedor />} />
+                <Route path="/bienvenidoVendedor/RegistrarVendedor/registrarItems" element={<RegistrarItems />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor" element={<BuscarVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/VendedorBuscado" element={<VendedorBuscado />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/ModificarVendedor" element={<ModificarVendedor />} />
@@ -123,7 +123,7 @@ const MainApp = () => {
                 <Route path="/bienvenidoCliente/BuscarCliente" element={<BuscarCliente />} />
                 <Route path="/bienvenidoCliente/BuscarCliente/EliminarCliente" element={<EliminarCliente />} />
                 <Route path="/bienvenidoCliente/BuscarCliente/ModificarCliente" element={<ModificarCliente />} />
-
+               
 
             </Routes>
         </Router>

@@ -37,6 +37,10 @@ const RegistrarVendedor = ({ resetForm }) => {
 
         console.log("Formulario cancelado");
     };
+    
+    const goToRegistrarItem = () =>{
+        navigate('./registrarItems')
+    }
 
     const [form, setForm] = useState({
         apellido: '',
@@ -274,7 +278,8 @@ const RegistrarVendedor = ({ resetForm }) => {
 
 
                 <div className='BotonesVendedor'>
-                    <button className='botonRegVendedor' type="submit">Registrar</button>
+                    <button className='botonRegVendedor' type="submit"> Registrar</button>
+                    <button className='botonAgregarItems' type="submit" onClick={goToRegistrarItem}>AgregarItems</button>
                     <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
                 </div>
                 {backendMessage == "Vendedor creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
