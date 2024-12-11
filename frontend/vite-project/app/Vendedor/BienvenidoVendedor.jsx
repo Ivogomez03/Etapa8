@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { HashRouter, useNavigate } from 'react-router-dom';
 import './BienvenidoVendedor.css'
+
 const BienvenidoVendedor = () => {
     const navigate = useNavigate();
 

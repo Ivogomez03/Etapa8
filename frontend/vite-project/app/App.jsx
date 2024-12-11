@@ -2,16 +2,24 @@ import React from 'react';
 import './App.css'
 import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import BienvenidoVendedor from './Vendedor/BienvenidoVendedor';
+import BienvenidoCliente from './Cliente/BienvenidoCliente';
 import RegistrarVendedor from './Vendedor/Registrar/RegistrarVendedor';
 import BuscarVendedor from './Vendedor/Buscar/BuscarVendedor';
 import VendedorBuscado from './Vendedor/Buscar/VendedorBuscado';
 import ModificarVendedor from './Vendedor/Modificar/ModificarVendedor';
 import EliminarVendedor from './Vendedor/Eliminar/EliminarVendedor';
+import RegistrarCliente from './Cliente/Registrar/RegistrarCliente';
+
+
 const App = () => {
     console.log("App cargado correctamente");
     const navigate = useNavigate();
+
     const goToBienvenidoVendedor = () => {
         navigate('/bienvenidoVendedor');
+    }
+    const goToBienvenidoCliente = () => {
+        navigate('/bienvenidoCliente');
     }
     return (
         <div className='conteiner-App'>
@@ -25,7 +33,7 @@ const App = () => {
                         <button className="botones-navegacion" onClick={goToBienvenidoVendedor}>
                             Vendedores
                         </button>
-                        <button className="botones-navegacion">
+                        <button className="botones-navegacion" onClick={goToBienvenidoCliente}>
                             Clientes
                         </button>
                     </div>
@@ -105,6 +113,8 @@ const MainApp = () => {
                 <Route path="/bienvenidoVendedor/BuscarVendedor/VendedorBuscado" element={<VendedorBuscado />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/ModificarVendedor" element={<ModificarVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/EliminarVendedor" element={<EliminarVendedor />} />
+                <Route path="/bienvenidoCliente" element={<BienvenidoCliente />} />
+                <Route path="/bienvenidoCliente/RegistrarCliente" element={<RegistrarCliente />} />
 
 
             </Routes>
