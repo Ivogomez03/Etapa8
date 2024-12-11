@@ -15,9 +15,10 @@ public interface IClienteServicio {
     // Obtener todos los clientes
     public List<ClienteDTO> obtenerTodosLosClientes();
 
-    // Eliminar un cliente por ID
-    public void eliminarCliente(Integer id);
-
     public ClienteDTO convertirAclienteDto(Cliente cliente);
+
+    public void modificarCliente(ClienteDTO clienteDTO);
+
+    public void eliminarCliente(String cuit);
 
 }

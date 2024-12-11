@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './ModificarVendedor.css';
+import './ModificarCliente.css';
 import Cancelar from '../../Cancelar/Cancelar';
 
-const ModificarVendedor = ({ resetForm }) => {
+const ModificarCliente = ({ resetForm }) => {
     const navigate = useNavigate();
     const goBack = () => {
         navigate(-1); // Navega hacia la página anterior
@@ -14,42 +14,33 @@ const ModificarVendedor = ({ resetForm }) => {
 
     const location = useLocation();
 
-    const vendedor = location.state?.vendedor;
-    console.log(vendedor);
+    const cliente = location.state?.cliente;
+    console.log(cliente);
     const [form, setForm] = useState({
-        apellido: '',
-        nombre: '',
+        email: '',
         longitud: '',
         latitud: '',
         direccion: '',
-        dni: ''
+        cuit: ''
     });
 
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        if (vendedor) {
+        if (cliente) {
             setForm({
-                apellido: vendedor.apellido || '',
-                nombre: vendedor.nombre || '',
-                longitud: vendedor.longitud || '',
-                latitud: vendedor.latitud || '',
-                direccion: vendedor.direccion || '',
-                dni: vendedor.dni || ''
+                email: cliente.email || '',
+                longitud: cliente.longitud || '',
+                latitud: cliente.latitud || '',
+                direccion: cliente.direccion || '',
+                cuit: cliente.cuit || ''
             });
         }
-    }, [vendedor]);
+    }, [cliente]);
 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        // Validar que ciertos campos acepten solo letras
-        if (["nombre", "apellido"].includes(name)) {
-            if (!onlyLetters(value)) {
-                return; // Salir si el valor contiene caracteres no permitidos
-            }
-        }
 
         console.log({ ...form })
 
@@ -65,7 +56,7 @@ const ModificarVendedor = ({ resetForm }) => {
 
 
         try {
-            const response = await fetch(`/vendedor/modificar`, {
+            const response = await fetch(`/cliente/modificar`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -92,7 +83,7 @@ const ModificarVendedor = ({ resetForm }) => {
     };
 
     return (
-        <div className="conteiner-mod-vendedor">
+        <div className="conteiner-mod-cliente">
             <div className="panel-izquierdo">
                 <button className="back-button" onClick={goBack}>
                     <svg
@@ -111,33 +102,25 @@ const ModificarVendedor = ({ resetForm }) => {
                 <h2>Ingrese los datos solicitados</h2>
             </div>
             <form onSubmit={handleSubmit} className="formulario">
-                <h2>Modificar Vendedor</h2>
+                <h2>Modificar Cliente</h2>
                 <input
                     type="text"
-                    name="dni"
-                    placeholder="Dni (solo lectura) "
-                    value={form.dni + " (solo lectura)"}
+                    name="cuit"
+                    placeholder="Cuit (solo lectura) "
+                    value={form.cuit + " (solo lectura)"}
                     onChange={handleChange}
-                    className="inputModVendedor" /* Clase correcta */
+                    className="inputModCliente" /* Clase correcta */
                     readOnly
                 />
                 <input
                     type="text"
-                    name="apellido"
-                    placeholder="Apellido"
-                    value={form.apellido}
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
                     onChange={handleChange}
-                    className="inputModVendedor" /* Clase correcta */
-                    readOnly
+                    className="inputModCliente" /* Clase correcta */
                 />
-                <input
-                    type="text"
-                    name="nombre"
-                    placeholder="Nombre"
-                    value={form.nombre}
-                    onChange={handleChange}
-                    className="inputModVendedor" /* Clase correcta */
-                />
+
 
                 <input
                     type="text"
@@ -145,7 +128,7 @@ const ModificarVendedor = ({ resetForm }) => {
                     placeholder="Latitud"
                     value={form.latitud}
                     onChange={handleChange}
-                    className="inputModVendedor" /* Clase correcta */
+                    className="inputModCliente" /* Clase correcta */
                 />
 
                 <input
@@ -154,7 +137,7 @@ const ModificarVendedor = ({ resetForm }) => {
                     placeholder="Longitud"
                     value={form.longitud}
                     onChange={handleChange}
-                    className="inputModVendedor" /* Clase correcta */
+                    className="inputModCliente" /* Clase correcta */
                 />
                 <input
                     type="text"
@@ -162,12 +145,13 @@ const ModificarVendedor = ({ resetForm }) => {
                     placeholder="Direccion"
                     value={form.direccion}
                     onChange={handleChange}
-                    className="inputModVendedor" /* Clase correcta */
+                    className="inputModCliente" /* Clase correcta */
+
                 />
 
 
-                <div className="BotonesVendedor">
-                    <button type="submit" className="botonModVendedor">Modificar</button>
+                <div className="BotonesCliente">
+                    <button type="submit" className="botonModCliente">Modificar</button>
                     <button
                         type="button"
                         onClick={() => setShowModal(true)}
@@ -187,4 +171,4 @@ const ModificarVendedor = ({ resetForm }) => {
     );
 };
 
-export default ModificarVendedor;
+export default ModificarCliente;

@@ -40,7 +40,7 @@ public class VendedorServicio implements IVendedorServicio {
             throw new RuntimeException("No se ha encontrado el vendedor con dni proporcionado");
         }
         vendedor.setNombre(vendedorDTO.getNombre());
-        vendedor.setApellido(vendedorDTO.getApellido());
+        vendedor.setDireccion(vendedorDTO.getDireccion());
         vendedor.setCoordenada(vendedorDTO.getLatitud(), vendedorDTO.getLongitud());
         try {
             vendedorDAO.save(vendedor);

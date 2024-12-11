@@ -7,6 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,28 @@ public class ClienteControlador {
             return ResponseEntity.ok(dto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/cliente/modificar")
+    public ResponseEntity<String> modificarCliente(@RequestBody ClienteDTO clienteDTO) {
+
+        try {
+            clienteServicio.modificarCliente(clienteDTO);
+            return ResponseEntity.ok("El cliente ha sido modificado correctamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/cliente/eliminar")
+    public ResponseEntity<String> eliminarCliente(@RequestParam(required = true) String cuit) {
+
+        try {
+            clienteServicio.eliminarCliente(cuit);
+            return ResponseEntity.ok("El cliente ha sido deshabilitado correctamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

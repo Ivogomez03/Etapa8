@@ -21,6 +21,7 @@ public class ClienteServicio implements IClienteServicio {
     public void crearCliente(ClienteDTO clienteDTO) {
         Cliente cliente = new Cliente(clienteDTO.getEmail(), clienteDTO.getCuit(), clienteDTO.getDireccion(),
                 clienteDTO.getLatitud(), clienteDTO.getLongitud());
+        cliente.setHabilitado(true);
         try {
             clienteDAO.save(cliente);
         } catch (DataIntegrityViolationException e) {
@@ -32,7 +33,7 @@ public class ClienteServicio implements IClienteServicio {
     // Buscar un cliente por CUIT
     public ClienteDTO buscarCliente(String cuit) {
         Cliente cliente = clienteDAO.buscarClientePorCuit(cuit);
-        if (cliente == null)
+        if (cliente == null || !cliente.isHabilitado())
             throw new IllegalArgumentException("No se ha encontrado el cliente con el cuit " + cuit);
 
         return convertirAclienteDto(cliente);
@@ -49,6 +50,30 @@ public class ClienteServicio implements IClienteServicio {
                 .collect(Collectors.toList());
     }
 
+    public void modificarCliente(ClienteDTO clienteDTO) {
+        Cliente cliente = clienteDAO.buscarClientePorCuit(clienteDTO.getCuit());
+        if (cliente == null || !cliente.isHabilitado()) {
+            throw new RuntimeException("No se ha encontrado el cliente con el cuit proporcionado");
+        }
+        cliente.setEmail(clienteDTO.getEmail());
+        cliente.setDireccion(clienteDTO.getDireccion());
+        cliente.setCoordenada(clienteDTO.getLatitud(), clienteDTO.getLongitud());
+        try {
+            clienteDAO.save(cliente);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error al modificar el cliente");
+        }
+    }
+
+    public void eliminarCliente(String cuit) {
+        Cliente cliente = clienteDAO.buscarClientePorCuit(cuit);
+        if (cliente == null) {
+            throw new RuntimeException("No se ha encontrado el cliente con el cuit " + cuit);
+        }
+        cliente.setHabilitado(false);
+        clienteDAO.save(cliente);
+    }
+
     public ClienteDTO convertirAclienteDto(Cliente cliente) {
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setCuit(cliente.getCuit());
@@ -58,10 +83,5 @@ public class ClienteServicio implements IClienteServicio {
         clienteDTO.setLongitud(cliente.getCoordenadas().getLng());
         return clienteDTO;
 
-    }
-
-    // Eliminar un cliente por ID
-    public void eliminarCliente(Integer id) {
-        clienteDAO.deleteById(id);
     }
 }

@@ -42,6 +42,9 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pedido> pedidos = new ArrayList<Pedido>();
 
+    @Column(name = "habilitado", nullable = false)
+    private boolean habilitado;
+
     public Cliente() {
         this.pedidos = new ArrayList<>();
     }
@@ -55,6 +58,11 @@ public class Cliente {
 
     public void addPedido(Pedido ped) {
         this.pedidos.add(ped);
+    }
+
+    public void setCoordenada(double lat, double lng) {
+        this.coordenadas.setLat(lat);
+        this.coordenadas.setLng(lng);
     }
 
     public void println() {

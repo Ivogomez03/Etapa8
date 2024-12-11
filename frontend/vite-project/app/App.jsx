@@ -9,6 +9,10 @@ import VendedorBuscado from './Vendedor/Buscar/VendedorBuscado';
 import ModificarVendedor from './Vendedor/Modificar/ModificarVendedor';
 import EliminarVendedor from './Vendedor/Eliminar/EliminarVendedor';
 import RegistrarCliente from './Cliente/Registrar/RegistrarCliente';
+import ClienteBuscado from './Cliente/Buscar/ClienteBuscado';
+import BuscarCliente from './Cliente/Buscar/BuscarCliente';
+import EliminarCliente from './Cliente/Eliminar/EliminarCliente';
+import ModificarCliente from './Cliente/Modificar/ModificarCliente';
 
 
 const App = () => {
@@ -115,6 +119,10 @@ const MainApp = () => {
                 <Route path="/bienvenidoVendedor/BuscarVendedor/EliminarVendedor" element={<EliminarVendedor />} />
                 <Route path="/bienvenidoCliente" element={<BienvenidoCliente />} />
                 <Route path="/bienvenidoCliente/RegistrarCliente" element={<RegistrarCliente />} />
+                <Route path="/bienvenidoCliente/BuscarCliente/ClienteBuscado" element={<ClienteBuscado />} />
+                <Route path="/bienvenidoCliente/BuscarCliente" element={<BuscarCliente />} />
+                <Route path="/bienvenidoCliente/BuscarCliente/EliminarCliente" element={<EliminarCliente />} />
+                <Route path="/bienvenidoCliente/BuscarCliente/ModificarCliente" element={<ModificarCliente />} />
 
 
             </Routes>

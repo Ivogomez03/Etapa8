@@ -92,16 +92,11 @@ const RegistrarCliente = ({ resetForm }) => {
         }
     }, [resetForm]);
 
-    /*
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // Validar que ciertos campos acepten solo letras
-        if (["nombre", "apellido"].includes(name)) {
-            if (!onlyLetters(value)) {
-                return; // Salir si el valor contiene caracteres no permitidos
-            }
-        }
+
         console.log({ ...form })
         setForm({
             ...form,
@@ -112,7 +107,6 @@ const RegistrarCliente = ({ resetForm }) => {
             [e.target.name]: false // Resetea el estado de error al cambiar el input
         });
     };
-    */
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -244,7 +238,7 @@ const RegistrarCliente = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`inputRegCliente ${errors.longitud ? 'input-error' : ''}`}
                 />
-               
+
 
                 <div className='BotonesCliente'>
                     <button className='botonRegCliente' type="submit">Registrar</button>
