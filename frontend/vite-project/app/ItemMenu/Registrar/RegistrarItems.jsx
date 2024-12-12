@@ -1,37 +1,179 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react'
+import { HashRouter, useNavigate, useLocation } from 'react-router-dom';
 import './RegistrarItems.css';
+import Cancelar from '../../Cancelar/Cancelar';
 
-const RegistrarItems = () => {
+const FormularioPlato = ({ form, handleChange, placeholders }) => (
+    <form className="formulario-derecho-palto">
+        <h3 className="titulo-caracteristicas">Características del Plato</h3>
+        <input
+            type="text"
+            name="calorias"
+            placeholder={placeholders.calorias}
+            value={form.calorias}
+            className="inputRegItem"
+            onChange={handleChange}
+        />
+        {['aptoCeliaco', 'aptoVegetariano', 'aptoVegano'].map((name) => (
+            <label key={name}>
+                <input
+                    type="checkbox"
+                    name={name}
+                    checked={form[name]}
+                    onChange={handleChange}
+                />
+                {name.replace('apto', '').replace(/([A-Z])/g, ' $1')}
+            </label>
+        ))}
+    </form>
+);
+
+const FormularioBebida = ({ form, handleChange, placeholders }) => (
+    <form className="formulario-derecho-bebida">
+        <h3 className="titulo-caracteristicas">Características de la Bebida</h3>
+        <label>
+            <input
+                type="checkbox"
+                name="isBebidaAlcoholica"
+                checked={form.isBebidaAlcoholica}
+                onChange={handleChange}
+            />
+            Bebida Alcohólica
+        </label>
+        {form.isBebidaAlcoholica && (
+            <input
+                type="text"
+                name="graduacionAlcohol"
+                value={form.graduacionAlcohol}
+                placeholder={placeholders.graduacionAlcohol}
+                onChange={handleChange}
+            />
+        )}
+        <label>
+            <input
+                type="checkbox"
+                name="aptoVegano"
+                checked={form.aptoVegano}
+                onChange={handleChange}
+            />
+            Apto Vegano
+        </label>
+    </form>
+);
+const RegistrarItems = ({ resetForm }) => {
     const navigate = useNavigate();
     const goBack = () => {
-        navigate(-1);
+        navigate("/bienvenidoVendedor/BuscarVendedor");
+    }
+    const location = useLocation();
+    const dniVendedor = location.state?.dniVendedor;
+    console.log(dniVendedor)
+    const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
+    const mostrar = () => {
+        setShowModal(true);
     }
 
+    const handleCancel = () => {
+        setShowModal(false);  // Cierra el modal sin hacer nada
+    };
+
+    // Función cuando se confirma la cancelación
+    const handleConfirmCancel = () => {
+        setShowModal(false);  // Cierra el modal
+        resetFormulario();
+        navigate(-1);
+
+        console.log("Formulario cancelado");
+    };
     const [form, setForm] = useState({
-      nombre: '',
-      precio: '',
-      descripcion_item: '',
-      categoria: '',
-      tipo_item: 'Plato',
-      calorias: '',
-      tamanio_ml: '',
-      graduacionAlcohol: '',
-      isBebidaAlcoholica: false,
-      aptoVegano: false,
-      aptoVegetariano: false,
-      aptoCeliaco: false,
+        nombre: '',
+        precio: '',
+        descripcion_item: '',
+        categoria: '',
+        tipo_item: 'PLATO',
+        calorias: '',
+        tamanio_ml: '',
+        graduacionAlcohol: '',
+        isBebidaAlcoholica: false,
+        aptoVegano: false,
+        aptoVegetariano: false,
+        aptoCeliaco: false,
     });
 
     const [placeholders, setPlaceholders] = useState({
-      nombre: 'Nombre',
-      precio: 'Precio',
-      calorias: 'Calorias',
-      tamanio_ml: 'tamanio (ml)',
-      graduacionAlcohol: 'graduacion alcohol',
-      descripcion_item: 'Descripcion de item',
-      categoria: 'Categoria',
+        nombre: 'Nombre',
+        precio: 'Precio',
+        calorias: 'Calorias',
+        tamanio_ml: 'tamanio (ml)',
+        graduacionAlcohol: 'graduacion alcohol',
+        descripcion_item: 'Descripcion de item',
+        categoria: 'Categoria',
     });
+    const [errors, setErrors] = useState({
+        nombre: false,
+        precio: false,
+        descripcion_item: false,
+        categoria: '',
+        tipo_item: false,
+        calorias: false,
+        tamanio_ml: false,
+        graduacionAlcohol: false,
+        isBebidaAlcoholica: false,
+        aptoVegano: false,
+        aptoVegetariano: false,
+        aptoCeliaco: false,
+    });
+    const [animationClass, setAnimationClass] = useState('');
+
+    const [backendMessage, setBackendMessage] = useState('');
+
+    const resetFormulario = () => {
+        setForm({
+            nombre: '',
+            precio: '',
+            descripcion_item: '',
+            categoria: '',
+            tipo_item: 'PLATO',
+            calorias: '',
+            tamanio_ml: '',
+            graduacionAlcohol: '',
+            isBebidaAlcoholica: false,
+            aptoVegano: false,
+            aptoVegetariano: false,
+            aptoCeliaco: false,
+        });
+        setPlaceholders({
+            nombre: 'Nombre',
+            precio: 'Precio',
+            calorias: 'Calorias',
+            tamanio_ml: 'tamanio (ml)',
+            graduacionAlcohol: 'graduacion alcohol',
+            descripcion_item: 'Descripcion de item',
+            categoria: 'Categoria',
+        })
+        setErrors({
+            nombre: false,
+            precio: false,
+            descripcion_item: false,
+            categoria: '',
+            tipo_item: false,
+            calorias: false,
+            tamanio_ml: false,
+            graduacionAlcohol: false,
+            isBebidaAlcoholica: false,
+            aptoVegano: false,
+            aptoVegetariano: false,
+            aptoCeliaco: false,
+
+        });
+        setBackendMessage('');
+    };
+    useEffect(() => {
+        if (resetForm) {
+            resetForm.current = resetFormulario;
+        }
+    }, [resetForm]);
+
 
     const handleChange = (e) => {
         const { name, checked, type } = e.target;
@@ -41,6 +183,84 @@ const RegistrarItems = () => {
             [name]: type === 'checkbox' ? checked : e.target.value,
         }));
     };
+    const handleSubmit = async (e) => {
+        console.log("El dto es: ", { ...form, dniVendedor });
+        e.preventDefault();
+        const newErrors = { ...errors };
+
+        // Validaciones locales
+        if (!form.nombre) {
+            newErrors.nombre = true;
+            setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre." }));
+        }
+        if (!form.precio) {
+            newErrors.precio = true;
+            setPlaceholders(prev => ({ ...prev, precio: "Completa el precio." }));
+        }
+        if (!form.descripcion_item) {
+            newErrors.descripcion_item = true;
+            setPlaceholders(prev => ({ ...prev, direccion: "Completa la descripcion del item." }));
+        }
+        if (!form.categoria) {
+            newErrors.categoria = true;
+            setPlaceholders(prev => ({ ...prev, categoria: "Completa la categoria." }));
+        }
+
+        // Actualizar el estado de errores
+        setErrors(newErrors);
+
+        // Si hay errores, detener el envío
+        if (Object.values(newErrors).some(error => error)) {
+            return;
+        }
+
+        try {
+            console.log("El dto es")
+            const queryParams = new URLSearchParams({
+                nombre: form.nombre,
+                precio: form.precio,
+                descripcion_item: form.descripcion_item,
+                categoria: form.categoria,
+                tipo_item: form.tipo_item,
+                calorias: form.calorias != '' ? form.calorias : 0,
+                tamanio_ml: form.tamanio_ml != '' ? form.tamanio_ml : 0,
+                graduacionAlcohol: form.graduacionAlcohol != '' ? form.graduacionAlcohol : 0,
+                isBebidaAlcoholica: form.isBebidaAlcoholica,
+                aptoVegano: form.aptoVegano,
+                aptoVegetariano: form.aptoVegetariano,
+                aptoCeliaco: form.aptoCeliaco,
+                dniVendedor: dniVendedor
+
+            }).toString();
+            const response = await fetch(`/itemMenu/crear?${queryParams}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+
+                console.log(errorMessage)
+                console.error('Error del servidor:', errorMessage);
+                return;
+            }
+
+            setBackendMessage("Item creado exitosamente.");
+
+            setAnimationClass('fade-in'); // Agregar clase de animación
+
+            setTimeout(() => {
+                setAnimationClass('fade-out'); // Iniciar fade out después de 2 segundos
+                resetFormulario(); // Limpiar formulario
+            }, 2000); // Esperar 2 segundos antes de hacer fade out
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+            setBackendMessage("Ocurrió un error en el servidor. Inténtalo de nuevo.");
+        }
+    }
 
     return (
         <div className='conteiner-reg-item'>
@@ -53,17 +273,17 @@ const RegistrarItems = () => {
 
                 <h1>Por favor</h1>
                 <h2>Ingrese los datos del item</h2>
-                <form className='formulario-item-general'>
+                <form className='formulario-item-general' onSubmit={handleSubmit}>
                     <h2>Registrar Item</h2>
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         name="nombre"
                         placeholder={placeholders.nombre}
                         value={form.nombre}
                         className={`inputRegItem`}
                         onChange={handleChange}
                     />
-                    <input 
+                    <input
                         type="text"
                         name="precio"
                         placeholder={placeholders.precio}
@@ -71,115 +291,70 @@ const RegistrarItems = () => {
                         className={`inputRegItem`}
                         onChange={handleChange}
                     />
-                    <textarea 
-                        name="descripcion_item" 
-                        placeholder={placeholders.descripcion_item} 
-                        value={form.descripcion_item} 
-                        className={'inputRegItem'} 
-                        onChange={handleChange}>      
+                    <input
+                        type="text"
+                        name="categoria"
+                        placeholder={placeholders.categoria}
+                        value={form.categoria}
+                        className={`inputRegItem`}
+                        onChange={handleChange}
+                    />
+                    <textarea
+                        name="descripcion_item"
+                        placeholder={placeholders.descripcion_item}
+                        value={form.descripcion_item}
+                        className={'inputRegItem'}
+                        onChange={handleChange}>
                     </textarea>
                     <div className='radio-group-tipo-item'>
                         <h3>Tipo de item</h3>
                         <label>
-                            <input 
-                                type="radio" 
+                            <input
+                                type="radio"
                                 name="tipo_item"
-                                value="Plato"
-                                checked={form.tipo_item === 'Plato'}
+                                value="PLATO"
+                                checked={form.tipo_item === 'PLATO'}
                                 onChange={handleChange}
                             />
                             Plato
                         </label>
                         <label>
-                            <input 
-                                type="radio" 
-                                name="tipo_item" 
-                                value="Bebida" 
-                                checked={form.tipo_item === 'Bebida'} 
+                            <input
+                                type="radio"
+                                name="tipo_item"
+                                value="BEBIDA"
+                                checked={form.tipo_item === 'BEBIDA'}
                                 onChange={handleChange}
                             />
                             Bebida
                         </label>
                     </div>
                 </form>
-            </div> 
-            <div className="panel-derecho">
-                {form.tipo_item === 'Plato' && (
-                    <form className="formulario-derecho-palto">
-                        <h3 className="titulo-caracteristicas">Caracteristicas del Plato</h3>
-
-                        <input 
-                            type="text" 
-                            name="calorias" 
-                            placeholder={placeholders.calorias}
-                            value={form.calorias}
-                            className={`inputRegItem`}
-                            onChange={handleChange}
-                        />
-                        <label>
-                            <input 
-                                type="checkbox" 
-                                name="aptoCeliaco"
-                                checked={form.aptoCeliaco} 
-                                onChange={handleChange}
-                            />
-                            Sin TACC
-                        </label>
-                        <label>
-                            <input 
-                                type="checkbox" 
-                                name="aptoVegetariano"
-                                checked={form.aptoVegetariano} 
-                                onChange={handleChange}
-                            />
-                            Apto Vegetariano
-                        </label>
-                        <label>
-                            <input 
-                                type="checkbox" 
-                                name="aptoVegano"
-                                checked={form.aptoVegano} 
-                                onChange={handleChange}
-                            />
-                            Apto Vegano
-                        </label>
-                    </form>
-                )}
-
-                {form.tipo_item === 'Bebida' && (
-                    <form className="formulario-derecho-bebida">
-                        <h3 className="titulo-caracteristicas">Caracteristicas de la bebida</h3>
-                        <label>
-                            <input 
-                                type="checkbox" 
-                                name="isBebidaAlcoholica"
-                                checked={form.isBebidaAlcoholica}
-                                onChange={handleChange}
-                            />
-                            Bebida Alcoholica
-                        </label>
-                        {form.isBebidaAlcoholica === true && (
-                            <input 
-                                type="text" 
-                                name="graduacionAlcohol"
-                                value={form.graduacionAlcohol} 
-                                placeholder={placeholders.graduacionAlcohol} 
-                                onChange={handleChange} 
-                            />
-                        )}
-                        <label>
-                            <input 
-                                type="checkbox" 
-                                name="aptoVegano"
-                                checked={form.aptoVegano} 
-                                onChange={handleChange}
-                            />
-                            Apto Vegano
-                        </label>
-                    </form>
-                )}
             </div>
+            <div className="panel-derecho">
+                {form.tipo_item === 'PLATO' && (
+                    <FormularioPlato form={form} handleChange={handleChange} placeholders={placeholders} />
+                )}
+                {form.tipo_item === 'BEBIDA' && (
+                    <FormularioBebida form={form} handleChange={handleChange} placeholders={placeholders} />
+                )}
+                <div className='BotonesItems'>
+                    <button className='botonRegItem' type="submit" onClick={handleSubmit}>Registrar</button>
+                    <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
+                </div>
+            </div>
+
+
+
+            {backendMessage == "Item creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
+            {showModal && (
+                <Cancelar
+                    onCancel={handleCancel}
+                    onConfirm={handleConfirmCancel}
+                />
+            )}
         </div>
+
     );
 }
 

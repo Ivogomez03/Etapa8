@@ -19,11 +19,13 @@ public class ItemMenuServicio implements IItemMenuServicio {
 
     @Autowired
     private ItemMenuDAO itemMenuDAO;
+    @Autowired
     private PlatoDAO platoDAO;
+    @Autowired
     private BebidaDAO bebidaDAO;
 
     public void agregarItem(ItemMenuDTO itemDTO) {
-        if (itemDTO.getTipo().equals("Plato")) {
+        if (itemDTO.getTipo().equals("PLATO")) {
             Plato plato = new Plato(itemDTO.getNombre(), itemDTO.getDesc(), itemDTO.getCategoria(), itemDTO.getPrecio(),
                     itemDTO.getCalorias(), itemDTO.isAptoCeliaco(), itemDTO.isAptoVegetariano(),
                     itemDTO.isEsVegano(), itemDTO.getVendedor());

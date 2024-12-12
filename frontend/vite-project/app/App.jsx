@@ -42,8 +42,6 @@ const App = () => {
                         <button className="botones-navegacion" onClick={goToBienvenidoCliente}>
                             Clientes
                         </button>
-                    </div>
-                    <div className='sub-seccion-botones-app'>
                         <button className="botones-navegacion">
                             Pedidos
                         </button>
@@ -112,7 +110,7 @@ const MainApp = () => {
                 <Route path="/" element={<App />} />
                 <Route path="/bienvenidoVendedor" element={<BienvenidoVendedor />} />
                 <Route path="/bienvenidoVendedor/RegistrarVendedor" element={<RegistrarVendedor />} />
-                <Route path="/bienvenidoVendedor/RegistrarVendedor/registrarItems" element={<RegistrarItems />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor/RegistrarItem" element={<RegistrarItems />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor" element={<BuscarVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/VendedorBuscado" element={<VendedorBuscado />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/ModificarVendedor" element={<ModificarVendedor />} />
@@ -123,7 +121,7 @@ const MainApp = () => {
                 <Route path="/bienvenidoCliente/BuscarCliente" element={<BuscarCliente />} />
                 <Route path="/bienvenidoCliente/BuscarCliente/EliminarCliente" element={<EliminarCliente />} />
                 <Route path="/bienvenidoCliente/BuscarCliente/ModificarCliente" element={<ModificarCliente />} />
-               
+
 
             </Routes>
         </Router>

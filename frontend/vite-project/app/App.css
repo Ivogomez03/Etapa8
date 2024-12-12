@@ -69,10 +69,10 @@ header {
 }
 
 .sub-seccion-botones-app {
-    width: 40%;
+    width: 90%;
     height: 50%;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
 }

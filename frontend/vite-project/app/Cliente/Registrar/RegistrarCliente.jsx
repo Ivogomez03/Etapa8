@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { HashRouter, useNavigate } from 'react-router-dom';
+import { HashRouter, useLocation, useNavigate } from 'react-router-dom';
 import './RegistrarCliente.css';
 import Cancelar from '../../Cancelar/Cancelar';
 
@@ -8,6 +8,8 @@ import Cancelar from '../../Cancelar/Cancelar';
 const RegistrarCliente = ({ resetForm }) => {
 
     const navigate = useNavigate();
+
+
 
     const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
     const onlyNumbers = (str) => /^[0-9]*$/.test(str);

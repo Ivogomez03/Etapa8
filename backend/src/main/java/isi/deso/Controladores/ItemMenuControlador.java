@@ -27,29 +27,29 @@ public class ItemMenuControlador {
 
     @PostMapping("/itemMenu/crear")
     public ResponseEntity<String> CrearItem(@RequestParam(required = true) String nombre,
-            @RequestParam(required = true) String descripcionCategoria,
+            @RequestParam(required = true) String categoria,
             @RequestParam(required = true) double precio,
-            @RequestParam(required = true) String desc,
-            @RequestParam(required = true) String tipo,
-            @RequestParam(required = true) boolean esVegano,
-            @RequestParam(required = true) double gradAlcohol,
-            @RequestParam(required = true) int tamanioBebida,
+            @RequestParam(required = true) String descripcion_item,
+            @RequestParam(required = true) String tipo_item,
+            @RequestParam(required = true) boolean aptoVegano,
+            @RequestParam(required = true) double graduacionAlcohol,
+            @RequestParam(required = true) int tamanio_ml,
             @RequestParam(required = true) boolean aptoVegetariano,
             @RequestParam(required = true) boolean aptoCeliaco,
-            @RequestParam(required = true) int Calorias,
+            @RequestParam(required = true) int calorias,
             @RequestParam(required = true) String dniVendedor) {
 
-        Categoria categoria = categoriaServicio.buscarCategoria(descripcionCategoria);
+        Categoria cat = categoriaServicio.buscarCategoria(categoria);
         ItemMenuDTO itemMenuDTO = new ItemMenuDTO();
         itemMenuDTO.setNombre(nombre);
-        itemMenuDTO.setCategoria(categoria);
+        itemMenuDTO.setCategoria(cat);
         itemMenuDTO.setPrecio(precio);
-        itemMenuDTO.setDesc(desc);
-        itemMenuDTO.setTipo(tipo);
-        itemMenuDTO.setGradAlcohol(gradAlcohol);
-        itemMenuDTO.setTamanioBebida(tamanioBebida);
-        itemMenuDTO.setCalorias(Calorias);
-        itemMenuDTO.setEsVegano(esVegano);
+        itemMenuDTO.setDesc(descripcion_item);
+        itemMenuDTO.setTipo(tipo_item);
+        itemMenuDTO.setGradAlcohol(graduacionAlcohol);
+        itemMenuDTO.setTamanioBebida(tamanio_ml);
+        itemMenuDTO.setCalorias(calorias);
+        itemMenuDTO.setEsVegano(aptoVegano);
         itemMenuDTO.setAptoCeliaco(aptoCeliaco);
         itemMenuDTO.setAptoVegetariano(aptoVegetariano);
         itemMenuDTO.setVendedor(vendedorServicio.buscarVendedorEntidad(dniVendedor));

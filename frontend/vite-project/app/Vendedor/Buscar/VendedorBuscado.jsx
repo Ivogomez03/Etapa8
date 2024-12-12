@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Iconos para editar y eliminar
+import { IoFastFoodOutline } from "react-icons/io5";
 import "./VendedorBuscado.css"; // Archivo CSS externo
 
 const VendedorBuscado = () => {
@@ -24,6 +25,10 @@ const VendedorBuscado = () => {
     // Función para manejar la edición
     const handleModificar = (vendedor) => {
         navigate(`/bienvenidoVendedor/BuscarVendedor/ModificarVendedor`, { state: { vendedor: vendedor } });
+    };
+
+    const handleRegistrarItem = (vendedor) => {
+        navigate(`/bienvenidoVendedor/BuscarVendedor/RegistrarItem`, { state: { dniVendedor: vendedor.dni } });
     };
 
     return (
@@ -74,6 +79,9 @@ const VendedorBuscado = () => {
                                 className="btn-accion btn-eliminar"
                             >
                                 <FaTrashAlt />
+                            </button>
+                            <button onClick={() => handleRegistrarItem(vendedor)}>
+                                Registrar Item <IoFastFoodOutline />
                             </button>
                         </td>
                     </tr>
