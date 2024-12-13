@@ -3,6 +3,61 @@ import { HashRouter, useNavigate, useLocation } from 'react-router-dom';
 import './RegistrarItems.css';
 import Cancelar from '../../Cancelar/Cancelar';
 
+const ListaCaracteristicasPlatos = () => {
+    
+    const [caracteristicas, setCaracteristicas] = useState([]);
+    const queryParams = new URLSearchParams({
+        tipoItem:'PLATO'
+
+    }).toString();
+
+    useEffect(() => {
+        const obtenerDatos = async () => {
+            try{
+                const response = await fetch(`/vendedor/buscarVendedor?${'PLATO'}`, {
+                    method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            if(!response.ok){
+                throw new Error(`Error de la API: ${response.status} - ${response.statusText}`);
+            }
+            const data = await response.json();
+            console.log("Categorias platos obtenidas", data);
+
+            setCaracteristicas(data);
+            }catch (error) {
+                console.error('Error en la solicitud:', error);
+                alert("Ocurrió un error en el servidor. Inténtalo de nuevo.");
+            }
+        };
+
+        obtenerDatos()
+    }, []);
+    
+    /*
+    const caracteristicas = [
+        {id:1, descripcion: "Pizzas", tipo: "PLATO"},
+        {id:2, descripcion: "Hamburguesas", tipo: "PLATO"}
+    ]   
+    */
+    
+    return(
+        <div className="Formulario-Lista-Categoria-Platos">            
+            <h1>Categoria platos</h1>
+            <ul>
+                {caracteristicas.map((caracteristica) => (
+                    <li key={index}>
+                        {caracteristica.descripcion}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    )
+}
+
+
 const FormularioPlato = ({ form, handleChange, placeholders }) => (
     <form className="formulario-derecho-palto">
         <h3 className="titulo-caracteristicas">Características del Plato</h3>
@@ -25,6 +80,8 @@ const FormularioPlato = ({ form, handleChange, placeholders }) => (
                 {name.replace('apto', '').replace(/([A-Z])/g, ' $1')}
             </label>
         ))}
+        <ListaCaracteristicasPlatos/>
+       
     </form>
 );
 
