@@ -66,33 +66,98 @@ const ListaCaracteristicasPlatos = ({ form, handleChange }) => {
     )
 }
 
+const CrearCategoriaNueva = ({form, handleChange, placeholders}) =>{
+    
+    const handleCategoriaChange = (e) => {
+        handleChange(e); // Actualiza el formulario con el valor de la nueva categoría
+    };
 
-const FormularioPlato = ({ form, handleChange, placeholders }) => (
-    <form className="formulario-derecho-palto">
-        <h3 className="titulo-caracteristicas">Características del Plato</h3>
-        <input
-            type="text"
-            name="calorias"
-            placeholder={placeholders.calorias}
-            value={form.calorias}
-            className="inputRegItem"
-            onChange={handleChange}
+    const [formCategoriaNueva, setForm] = useState({
+        descripcion:form.categoria,
+        tipoItem:form.tipo_item
+    });
+
+    const handleSubmitCategoria = async () => {
+        try{
+            const response = await fetch(`/categoria/crear`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formCategoriaNueva),
+            });
+            if (response.ok) {
+                alert('Categoría creada exitosamente');
+            } else {
+                alert('Error al crear la categoría');
+            }
+        }
+        catch (error) {
+            console.error('Error al enviar la categoría:', error);
+            alert('Error al enviar la categoría');
+        }
+    }
+
+
+    return(
+    <div>
+        <h1>Nueva categoira</h1>  
+        <input 
+        type="text" 
+        className='descripcionCategoriaNueva'
+        placeholder={placeholders.categoria}
+        value={form.categoria}
+        onChange={handleCategoriaChange}
         />
-        {['aptoCeliaco', 'aptoVegetariano', 'aptoVegano'].map((name) => (
-            <label key={name}>
-                <input
-                    type="checkbox"
-                    name={name}
-                    checked={form[name]}
-                    onChange={handleChange}
-                />
-                {name.replace('apto', '').replace(/([A-Z])/g, ' $1')}
-            </label>
-        ))}
-        {ListaCaracteristicasPlatos({ form, handleChange })}
+        <button onClick={handleSubmitCategoria}>Crear Categoria</button>
+    </div>
+    )}
 
-    </form>
-);
+const FormularioPlato = ({ form, handleChange, placeholders }) => {
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxChange = (event) => {
+        setIsChecked(event.target.checked);
+    };
+
+    return (
+        <form className="formulario-derecho-palto">
+            <h3 className="titulo-caracteristicas">Características del Plato</h3>
+            <input
+                type="text"
+                name="calorias"
+                placeholder={placeholders.calorias}
+                value={form.calorias}
+                className="inputRegItem"
+                onChange={handleChange}
+            />
+            {['aptoCeliaco', 'aptoVegetariano', 'aptoVegano'].map((name) => (
+                <label key={name}>
+                    <input
+                        type="checkbox"
+                        name={name}
+                        checked={form[name]}
+                        onChange={handleChange}
+                    />
+                    {name.replace('apto', '').replace(/([A-Z])/g, ' $1')}
+                </label>
+            ))}
+            
+            {!isChecked && <ListaCaracteristicasPlatos form={form} handleChange={handleChange} />}
+            <div>
+                <label>
+                    <input 
+                        type="checkbox" 
+                        checked={isChecked} 
+                        onChange={handleCheckboxChange}
+                    />
+                    Nueva categoria
+                </label>
+            </div>
+            {isChecked && <CrearCategoriaNueva form={form} handleChange={handleChange} placeholders={placeholders}/>}
+        </form>
+    );
+};
 
 const FormularioBebida = ({ form, handleChange, placeholders }) => (
     <form className="formulario-derecho-bebida">
