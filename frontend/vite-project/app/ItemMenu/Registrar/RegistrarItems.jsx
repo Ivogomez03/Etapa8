@@ -1,58 +1,67 @@
 import { useState, useEffect, useRef } from 'react'
 import { HashRouter, useNavigate, useLocation } from 'react-router-dom';
 import './RegistrarItems.css';
+import Select from 'react-select';
 import Cancelar from '../../Cancelar/Cancelar';
 
-const ListaCaracteristicasPlatos = () => {
-    
+const ListaCaracteristicasPlatos = ({ form, handleChange }) => {
+
     const [caracteristicas, setCaracteristicas] = useState([]);
     const queryParams = new URLSearchParams({
-        tipoItem:'PLATO'
+        tipoItem: form.tipo_item
 
     }).toString();
 
     useEffect(() => {
         const obtenerDatos = async () => {
-            try{
-                const response = await fetch(`/vendedor/buscarVendedor?${'PLATO'}`, {
-                    method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            if(!response.ok){
-                throw new Error(`Error de la API: ${response.status} - ${response.statusText}`);
-            }
-            const data = await response.json();
-            console.log("Categorias platos obtenidas", data);
+            const queryParams = new URLSearchParams({
+                tipoItem: form.tipo_item
 
-            setCaracteristicas(data);
-            }catch (error) {
+            }).toString();
+            try {
+                const response = await fetch(`/categoria/obtenerLista?${queryParams}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                if (!response.ok) {
+                    throw new Error(`Error de la API: ${response.status} - ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log("Categorias platos obtenidas", data);
+
+                setCaracteristicas(data);
+            } catch (error) {
                 console.error('Error en la solicitud:', error);
                 alert("Ocurrió un error en el servidor. Inténtalo de nuevo.");
             }
         };
 
         obtenerDatos()
-    }, []);
-    
+    }, [form.tipo_item]);
+
     /*
     const caracteristicas = [
         {id:1, descripcion: "Pizzas", tipo: "PLATO"},
         {id:2, descripcion: "Hamburguesas", tipo: "PLATO"}
     ]   
     */
-    
-    return(
-        <div className="Formulario-Lista-Categoria-Platos">            
-            <h1>Categoria platos</h1>
-            <ul>
-                {caracteristicas.map((caracteristica) => (
-                    <li key={index}>
-                        {caracteristica.descripcion}
-                    </li>
+
+    return (
+        <div className="Formulario-Lista-Categoria-Platos">
+            <h1>Categoria {form.tipo_item}</h1>
+            <select
+                name="categoria"
+                value={form.categoria}
+                onChange={handleChange}
+                className={`select-RRP`}
+            >
+                <option value="" disabled>Selecciona un Item</option>
+                {caracteristicas.map((car, index) => (
+                    <option key={index} value={car}>{car}</option>
                 ))}
-            </ul>
+            </select>
         </div>
     )
 }
@@ -80,8 +89,8 @@ const FormularioPlato = ({ form, handleChange, placeholders }) => (
                 {name.replace('apto', '').replace(/([A-Z])/g, ' $1')}
             </label>
         ))}
-        <ListaCaracteristicasPlatos/>
-       
+        {ListaCaracteristicasPlatos({ form, handleChange })}
+
     </form>
 );
 
@@ -115,6 +124,7 @@ const FormularioBebida = ({ form, handleChange, placeholders }) => (
             />
             Apto Vegano
         </label>
+        {ListaCaracteristicasPlatos({ form, handleChange })}
     </form>
 );
 const RegistrarItems = ({ resetForm }) => {
@@ -345,14 +355,6 @@ const RegistrarItems = ({ resetForm }) => {
                         name="precio"
                         placeholder={placeholders.precio}
                         value={form.precio}
-                        className={`inputRegItem`}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        name="categoria"
-                        placeholder={placeholders.categoria}
-                        value={form.categoria}
                         className={`inputRegItem`}
                         onChange={handleChange}
                     />

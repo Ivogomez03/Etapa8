@@ -370,3 +370,35 @@ input[type="radio"] {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   transform: translateY(-2px);
 }
+
+/* Estilo general del select */
+.select-RRP {
+  width: 52%;
+  padding: 15px 10px;
+  margin: 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: #f3f3f3;
+  color: #333;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Cambiar estilo en hover */
+.select-RRP:hover {
+  border-color: #999;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiar estilo en focus */
+.select-RRP:focus {
+  outline: none;
+  /* Fondo más claro en focus */
+}
+
+
+/* Estilo de error para el select */
+.select-error-RRP {
+  background-color: #ffe5e5;
+  border: 1px solid #ff6666;
+}

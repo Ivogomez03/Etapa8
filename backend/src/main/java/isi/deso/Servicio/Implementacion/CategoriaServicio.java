@@ -44,7 +44,7 @@ public class CategoriaServicio implements ICategoriaServicio {
     // Obtener categorías por tipo de ítem (Plato o Bebida)
     public List<String> obtenerCategorias(String tipoItem) throws RuntimeException {
         try {
-            if (tipoItem == "PLATO") {
+            if (tipoItem.equals("PLATO")) {
                 return categoriaDAO.findPlatos();
             } else {
                 return categoriaDAO.findBebidas();
