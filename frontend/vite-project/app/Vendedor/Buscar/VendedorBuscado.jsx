@@ -31,6 +31,10 @@ const VendedorBuscado = () => {
         navigate(`/bienvenidoVendedor/BuscarVendedor/RegistrarItem`, { state: { dniVendedor: vendedor.dni } });
     };
 
+    const handleCatalogoVendedor = (dni) => {
+        navigate(`/bienvenidoVendedor/BuscarVendedor/Catalogo`, { state: { dniVendedor: dni } });
+    };
+
     return (
         <div className="lista-vendedor-container">
             <button className="back-button" onClick={goBack}>
@@ -82,6 +86,9 @@ const VendedorBuscado = () => {
                             </button>
                             <button onClick={() => handleRegistrarItem(vendedor)}>
                                 Registrar Item <IoFastFoodOutline />
+                            </button>
+                            <button onClick={() => handleCatalogoVendedor(vendedor.dni)}>
+                                Catalogo <IoFastFoodOutline />
                             </button>
                         </td>
                     </tr>

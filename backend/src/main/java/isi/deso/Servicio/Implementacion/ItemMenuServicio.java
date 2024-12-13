@@ -62,6 +62,18 @@ public class ItemMenuServicio implements IItemMenuServicio {
 
     }
 
+    public List<ItemMenuDTO> obtenerTodosLosItemsPorVendedor(String dni) {
+        List<ItemMenu> items = itemMenuDAO.buscarItemsPorVendedor(dni);
+
+        if (items.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron items.");
+        }
+        return items.stream()
+                .map(this::convertirAimDTO)
+                .collect(Collectors.toList());
+
+    }
+
     public ItemMenuDTO convertirAimDTO(ItemMenu itemMenu) {
         ItemMenuDTO itemMenuDTO = new ItemMenuDTO();
         itemMenuDTO.setNombre(itemMenu.getNombre());

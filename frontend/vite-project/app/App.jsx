@@ -14,6 +14,7 @@ import BuscarCliente from './Cliente/Buscar/BuscarCliente';
 import EliminarCliente from './Cliente/Eliminar/EliminarCliente';
 import ModificarCliente from './Cliente/Modificar/ModificarCliente';
 import RegistrarItems from './ItemMenu/Registrar/RegistrarItems';
+import CatalogoVendedor from './Vendedor/Catalogo/CatalogoVendedor';
 
 
 const App = () => {
@@ -111,6 +112,7 @@ const MainApp = () => {
                 <Route path="/bienvenidoVendedor" element={<BienvenidoVendedor />} />
                 <Route path="/bienvenidoVendedor/RegistrarVendedor" element={<RegistrarVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/RegistrarItem" element={<RegistrarItems />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo" element={<CatalogoVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor" element={<BuscarVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/VendedorBuscado" element={<VendedorBuscado />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/ModificarVendedor" element={<ModificarVendedor />} />
