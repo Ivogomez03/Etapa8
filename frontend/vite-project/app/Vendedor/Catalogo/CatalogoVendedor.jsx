@@ -84,7 +84,7 @@ const TablaItems = ({ dniVendedor, handleEliminar, handleModificar, goBack }) =>
                                             <FaEdit />
                                         </button>
                                         <button
-                                            onClick={() => handleEliminar(item.id)}
+                                            onClick={() => handleEliminar(item)}
                                             className="btn-accion btn-eliminar"
                                         >
                                             <FaTrashAlt />
@@ -99,7 +99,7 @@ const TablaItems = ({ dniVendedor, handleEliminar, handleModificar, goBack }) =>
             {platos.length > 0 && (
                 <div>
                     <h3>Platos</h3>
-                    <table className="tabla-aulas">
+                    <table className="tabla-items">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -122,13 +122,13 @@ const TablaItems = ({ dniVendedor, handleEliminar, handleModificar, goBack }) =>
                                     <td>{item.esVegano ? "Sí" : "No"}</td>
                                     <td>
                                         <button
-                                            onClick={() => handleModificar(dniVendedor)}
+                                            onClick={() => handleModificar(item)}
                                             className="btn-accion btn-editar"
                                         >
                                             <FaEdit />
                                         </button>
                                         <button
-                                            onClick={() => handleEliminar(dniVendedor)}
+                                            onClick={() => handleEliminar(item)}
                                             className="btn-accion btn-eliminar"
                                         >
                                             <FaTrashAlt />
@@ -159,15 +159,14 @@ const ListaItems = () => {
     console.log(dniVendedor)
 
     // Función para manejar la eliminación
-    const handleEliminar = (dniVendedor) => {
-        navigate(`/login/bienvenidoBedel/BuscarAulas/EliminarAula/${dniVendedor}`);
-        console.log(`Eliminar aula con ID: ${idAula}`);
+    const handleEliminar = (item) => {
+        navigate(`/bienvenidoVendedor/BuscarVendedor/Catalogo/EliminarItem`, { state: { item: item } });
     };
 
     // Función para manejar la edición
-    const handleModificar = (dniVendedor) => {
+    const handleModificar = (item) => {
 
-        navigate(`/login/bienvenidoBedel/BuscarAulas/ListaAulas/ModificarAulaMultimedio`, { state: { dniVendedor: dniVendedor } });
+        navigate(`/bienvenidoVendedor/BuscarVendedor/Catalogo/ModificarItem`, { state: { item: item, dniVendedor: dniVendedor } });
 
     };
 

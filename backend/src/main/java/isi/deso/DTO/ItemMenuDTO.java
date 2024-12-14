@@ -7,6 +7,7 @@ package isi.deso.DTO;
 import isi.deso.model.Categoria;
 import isi.deso.model.Vendedor;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -26,6 +27,8 @@ public class ItemMenuDTO {
     private boolean aptoVegetariano;
     private boolean aptoCeliaco;
     private int calorias;
+    private int idItem;
+    @JsonIgnore
     private Vendedor vendedor;
 
     public ItemMenuDTO() {

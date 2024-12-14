@@ -20,8 +20,8 @@ public class PedidoDTO {
     private List<ItemsPedidoDTO> detalle;
     private Estado estado;
     private String pago;
-    private String CuitCliente;
-    private String DniVendedor;
+    private String cuitCliente;
+    private String dniVendedor;
     private double montoPago;
     private String credenciales;
 

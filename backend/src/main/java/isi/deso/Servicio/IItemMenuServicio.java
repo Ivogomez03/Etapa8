@@ -10,13 +10,15 @@ public interface IItemMenuServicio {
     // Crear o actualizar un ItemMenu
     public void agregarItem(ItemMenuDTO itemMenu);
 
+    public void modificarItem(ItemMenuDTO itemDTO, int id);
+
     public ItemMenuDTO convertirAimDTO(ItemMenu itemMenu);
 
     // Obtener todos los items de menú
     public List<ItemMenuDTO> obtenerTodosLosItems();
 
     // Eliminar un ItemMenu por ID
-    public void eliminarItemMenu(Integer id);
+    public void eliminarItem(int id);
 
     // Buscar un ItemMenu por ID
     public ItemMenu obtenerItemPorId(Integer id);

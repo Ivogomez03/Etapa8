@@ -74,6 +74,21 @@ public class ItemMenuServicio implements IItemMenuServicio {
 
     }
 
+    public void modificarItem(ItemMenuDTO itemDTO, int idItem) {
+
+        ItemMenu item = this.obtenerItemPorId(idItem);
+        if (item == null || !item.isHabilitado()) {
+            throw new RuntimeException("No se ha encontrado el item con el nombre proporcionado");
+        }
+        item.setPrecio(itemDTO.getPrecio());
+        item.setDescripcion(itemDTO.getDesc());
+        try {
+            itemMenuDAO.save(item);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error al modificar el item");
+        }
+    }
+
     public ItemMenuDTO convertirAimDTO(ItemMenu itemMenu) {
         ItemMenuDTO itemMenuDTO = new ItemMenuDTO();
         itemMenuDTO.setNombre(itemMenu.getNombre());
@@ -82,6 +97,7 @@ public class ItemMenuServicio implements IItemMenuServicio {
         itemMenuDTO.setDesc(itemMenu.getDescripcion());
         itemMenuDTO.setEsVegano(itemMenu.getAptoVegano());
         itemMenuDTO.setVendedor(itemMenu.getVendedor());
+        itemMenuDTO.setIdItem(itemMenu.getId());
         if (itemMenu instanceof Bebida) {
             Bebida bebida = (Bebida) itemMenu;
             itemMenuDTO.setGradAlcohol(bebida.getGraduacionAlcohol());
@@ -99,11 +115,6 @@ public class ItemMenuServicio implements IItemMenuServicio {
         }
         return itemMenuDTO;
 
-    }
-
-    // Eliminar un ItemMenu por ID
-    public void eliminarItemMenu(Integer id) {
-        itemMenuDAO.deleteById(id);
     }
 
     // Buscar un ItemMenu por ID
@@ -164,5 +175,14 @@ public class ItemMenuServicio implements IItemMenuServicio {
             throw new RuntimeException("Error al encontrar la bebida con nombre " + nombre);
         return convertirAimDTO(bebida);
 
+    }
+
+    public void eliminarItem(int id) {
+        ItemMenu item = itemMenuDAO.findByIdAndHabilitadoTrue(id);
+        if (item == null) {
+            throw new RuntimeException("No se ha encontrado el item ");
+        }
+        item.setHabilitado(false);
+        itemMenuDAO.save(item);
     }
 }

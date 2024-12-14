@@ -88,7 +88,7 @@ public class PedidoControlador {
     public ResponseEntity<String> CrearPedido(@RequestBody PedidoDTO pedidoDTO) {
         try {
             pedidoServicio.crearPedido(pedidoDTO);
-            return ResponseEntity.ok("El cliente ha sido creado correctamente.");
+            return ResponseEntity.ok("El pedido ha sido creado correctamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

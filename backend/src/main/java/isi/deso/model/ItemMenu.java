@@ -48,7 +48,8 @@ public abstract class ItemMenu {
     @OneToMany(mappedBy = "itemMenu", fetch = FetchType.LAZY)
     private List<ItemsPedido> itemsPedidos;
 
-    private boolean disponible;
+    @Column(name = "disponible", nullable = false)
+    private boolean habilitado;
 
     public abstract double peso(double p);
 
@@ -57,7 +58,7 @@ public abstract class ItemMenu {
     public abstract boolean esBebida();
 
     public ItemMenu() {
-        this.disponible = true;
+        this.habilitado = true;
     }
 
     public ItemMenu(String nombre, String descripcion, Categoria categoria, double precio, boolean aptoVegano,
@@ -68,7 +69,7 @@ public abstract class ItemMenu {
         this.precio = precio;
         this.aptoVegano = aptoVegano;
         this.vendedor = vendedor;
-        this.disponible = true;
+        this.habilitado = true;
     }
 
     @Override

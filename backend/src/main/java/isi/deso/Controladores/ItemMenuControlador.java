@@ -8,6 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import isi.deso.DTO.ItemMenuDTO;
@@ -62,6 +64,42 @@ public class ItemMenuControlador {
         }
     }
 
+    @PutMapping("/itemMenu/modificarItem")
+    public ResponseEntity<String> modificarItem(@RequestParam(required = true) String nombre,
+            @RequestParam(required = true) String categoria,
+            @RequestParam(required = true) double precio,
+            @RequestParam(required = true) String descripcion_item,
+            @RequestParam(required = true) String tipo_item,
+            @RequestParam(required = true) boolean aptoVegano,
+            @RequestParam(required = true) double graduacionAlcohol,
+            @RequestParam(required = true) int tamanio_ml,
+            @RequestParam(required = true) boolean aptoVegetariano,
+            @RequestParam(required = true) boolean aptoCeliaco,
+            @RequestParam(required = true) int calorias,
+            @RequestParam(required = true) String dniVendedor,
+            @RequestParam(required = true) int idItem) {
+        Categoria cat = categoriaServicio.buscarCategoria(categoria);
+        ItemMenuDTO itemMenuDTO = new ItemMenuDTO();
+        itemMenuDTO.setNombre(nombre);
+        itemMenuDTO.setCategoria(cat);
+        itemMenuDTO.setPrecio(precio);
+        itemMenuDTO.setDesc(descripcion_item);
+        itemMenuDTO.setTipo(tipo_item);
+        itemMenuDTO.setGradAlcohol(graduacionAlcohol);
+        itemMenuDTO.setTamanioBebida(tamanio_ml);
+        itemMenuDTO.setCalorias(calorias);
+        itemMenuDTO.setEsVegano(aptoVegano);
+        itemMenuDTO.setAptoCeliaco(aptoCeliaco);
+        itemMenuDTO.setAptoVegetariano(aptoVegetariano);
+        itemMenuDTO.setVendedor(vendedorServicio.buscarVendedorEntidad(dniVendedor));
+        try {
+            imServicio.modificarItem(itemMenuDTO, idItem);
+            return ResponseEntity.ok("El item ha sido modificado correctamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/itemMenu/obtenerItemsMenu")
     public ResponseEntity<List<ItemMenuDTO>> obtenerItemsMenu() {
 
@@ -74,6 +112,17 @@ public class ItemMenuControlador {
 
         }
 
+    }
+
+    @DeleteMapping("/itemMenu/eliminar")
+    public ResponseEntity<String> eliminarItem(@RequestParam(required = true) int idItem) {
+
+        try {
+            imServicio.eliminarItem(idItem);
+            return ResponseEntity.ok("El item ha sido deshabilitado correctamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/itemMenu/obtenerItemsMenuPorVendedor")

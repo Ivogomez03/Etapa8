@@ -15,6 +15,9 @@ import EliminarCliente from './Cliente/Eliminar/EliminarCliente';
 import ModificarCliente from './Cliente/Modificar/ModificarCliente';
 import RegistrarItems from './ItemMenu/Registrar/RegistrarItems';
 import CatalogoVendedor from './Vendedor/Catalogo/CatalogoVendedor';
+import RegistrarPedido from './Pedido/Registrar/RegistrarPedido';
+import ModificarItem from './ItemMenu/Modificar/ModificarItem';
+import EliminarItem from './ItemMenu/Eliminar/EliminarItem';
 
 
 const App = () => {
@@ -114,6 +117,9 @@ const MainApp = () => {
                 <Route path="/bienvenidoVendedor/BuscarVendedor/RegistrarItem" element={<RegistrarItems />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo" element={<CatalogoVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor" element={<BuscarVendedor />} />
+                <Route path="/bienvenidoVendedor/RegistrarPedido" element={<RegistrarPedido />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo/ModificarItem" element={<ModificarItem />} />
+                <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo/EliminarItem" element={<EliminarItem />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/VendedorBuscado" element={<VendedorBuscado />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/ModificarVendedor" element={<ModificarVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/EliminarVendedor" element={<EliminarVendedor />} />
