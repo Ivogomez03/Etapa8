@@ -101,7 +101,7 @@ const CrearCategoriaNueva = ({form, handleChange, placeholders}) =>{
 
     return(
     <div>
-        <h1>Nueva categoira</h1>  
+        <h1>Nueva categoria</h1>  
         <input 
         type="text" 
         className='descripcionCategoriaNueva'
