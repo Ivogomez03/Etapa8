@@ -37,7 +37,7 @@ public class Vendedor {
     @Column(name = "DNI")
     private String dni;
 
-    @Column(name = "habilitado")
+    @Column(name = "activo")
     private boolean habilitado;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -51,6 +51,7 @@ public class Vendedor {
     private List<Pedido> pedidosRecibidos; // lista de los pedidos que se le realizaron al vendedor
 
     public Vendedor() {
+        this.habilitado = true;
     }
 
     public Vendedor(String nombre, String apellido, String direccion, String dni, double lat, double lng,
@@ -62,6 +63,7 @@ public class Vendedor {
         this.dni = dni;
         this.coordenadas = new Coordenada(lat, lng);
         this.items = items;
+        this.habilitado = true;
     }
 
     public void println() {
