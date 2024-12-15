@@ -16,6 +16,11 @@ public interface BebidaDAO extends JpaRepository<Bebida, Integer> {
                         "WHERE v.dni = :dniVendedor AND b.graduacionAlcohol = 0")
         List<Bebida> findBebidasSinAlcohol(String dniVendedor);
 
+        @Query("SELECT b FROM ItemMenu im JOIN Bebida b ON im.id = b.id " +
+                        "JOIN Vendedor v ON im.vendedor.id = v.id " +
+                        "WHERE v.dni = :dniVendedor")
+        List<Bebida> findBebidas(String dniVendedor);
+
         // Consultar una bebida por su nombre
         @Query("SELECT b FROM ItemMenu im JOIN Bebida b ON im.id = b.id " +
                         "WHERE im.nombre = :nombre")

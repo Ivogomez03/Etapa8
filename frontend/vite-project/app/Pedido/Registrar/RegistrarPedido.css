@@ -1,36 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-.conteiner-reg-pedido {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-}
-
-.panel-izquierdo {
-    position: relative;
-    width: 40%;
-    height: 100%;
+/* Contenedor principal */
+.lista-items-container {
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
     background-color: #EA044E;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: white;
-    border-radius: 0% 8% 8% 0%;
-
-    animation: slideIn 1s ease-out forwards;
-}
-
-.panel-izquierdo h2 {
-    font-size: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px #000000;
     color: white;
 }
 
+/* Botón de retroceso */
 .back-button {
     position: fixed;
     top: 35px;
-    left: 35px;
+    left: 45px;
     background: none;
     border: none;
     cursor: pointer;
@@ -43,41 +26,111 @@
 
 .back-button:hover {
     color: #ffffff;
-    /* Cambia el color al pasar el mouse */
 }
 
+/* SVG */
 svg {
     stroke-width: 2;
-    /* Hace la flecha más gruesa */
     stroke: currentColor;
-    /* Asegura que tome el color actual */
 }
 
-.formulario {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    align-items: center;
-    width: 60%;
-    overflow-y: auto;
-    background-color: #fff;
-    animation: slideInRight 1s ease-out forwards;
-}
-
-h2 {
-    margin-top: 30px;
-    font-size: 32px;
+/* Título */
+.titulo {
+    font-size: 1.8rem;
+    color: #ffffff;
     margin-bottom: 20px;
     text-align: center;
-    color: #EA044E;
+    font-weight: bold;
 }
 
+/* Controles de categorías */
+div button {
+    background-color: #ffffff;
+    color: #EA044E;
+    font-weight: bold;
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
+div button:hover {
+    background-color: #EA044E;
+    color: white;
+}
+
+/* Tabla */
+.tabla-items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla-items thead tr {
+    background-color: #EA044E;
+    color: white;
+    text-align: left;
+}
+
+.tabla-items th,
+.tabla-items td {
+    padding: 12px 15px;
+    border: 1px solid #00000029;
+    border-radius: 2px;
+}
+
+.tabla-items th {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.tabla-items tbody tr {
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.tabla-items tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tabla-items tbody tr:hover {
+    background-color: #e9f5ff;
+}
+
+/* Detalle de selección */
+h3 {
+    color: white;
+    margin-top: 20px;
+}
+
+table {
+    margin-top: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+h4 {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: white;
+}
+
+/* Formulario de pago */
+form {
+    margin-top: 20px;
+}
+
+label {
+    color: white;
+    font-size: 18px;
+    margin-right: 10px;
+}
 
 .inputRegPedido {
-    width: 50%;
-    padding: 15px 10px;
+    width: 20%;
+    padding: 8px 3px;
     margin: 15px 0;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -101,97 +154,46 @@ h2 {
     /* Borde rojo suave para errores */
 }
 
-
-
-
-.BotonesPedido {
-    width: 50%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
-.botonCancelar,
-.botonRegPedido {
-    width: 40%;
-    padding: 12px;
-    margin-top: 20px;
-    background-color: #000;
-    color: #fff;
+form button {
+    background-color: #fff;
+    color: #EA044E;
+    padding: 10px;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    font-family: 'Roboto';
-    font-weight: 400;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s ease;
+    font-size: 1rem;
 }
 
-.botonCancelar {
+form button:hover {
     background-color: #EA044E;
+    color: white;
 }
 
-.botonCancelar:hover,
-.botonRegPedido:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    transform: translateY(-2px);
+/* Botones de acción */
+.btn-accion {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.fade-in {
-    animation: fadeIn 0.5s forwards;
+.btn-accion:focus {
+    outline: none;
 }
 
-.fade-out {
-    animation: fadeOut 0.5s forwards;
+/* Botón Eliminar */
+.btn-eliminar {
+    color: #dc3545;
 }
 
-@keyframes slideInRight {
-    from {
-        right: -30%;
-        /* Empieza fuera de la pantalla */
-    }
-
-    to {
-        right: 0;
-        /* Termina en su posición original */
-    }
+.btn-eliminar:hover {
+    background-color: #fdeaea;
+    color: #a71d2a;
 }
 
-@keyframes slideIn {
-    from {
-        left: -30%;
-        /* Empieza fuera de la pantalla */
-    }
-
-    to {
-        left: 0;
-        /* Termina en su posición original */
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
-
-.backend-message-exito {
-    margin-top: 10px;
-    color: green;
-    /* Puedes cambiar el color según tu diseño */
+.tabla-items td {
+    color: #000000;
 }

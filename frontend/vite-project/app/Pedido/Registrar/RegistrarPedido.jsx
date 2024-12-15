@@ -1,36 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './RegistrarPedido.css';
-import Cancelar from '../../Cancelar/Cancelar';
-
-const RegistrarPedido = ({ resetForm }) => {
-    const navigate = useNavigate();
-
-    const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
-    };
-
-    const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
-    const mostrar = () => {
-        setShowModal(true);
-    };
-
-    const handleCancel = () => {
-        setShowModal(false); // Cierra el modal sin hacer nada
-    };
-
-    const handleConfirmCancel = () => {
-        setShowModal(false); // Cierra el modal
-        resetFormulario();
-        navigate(-1);
-
-        console.log("Formulario cancelado");
-    };
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import './RegistrarPedido.css'
+const GeneradorItems = () => {
+    const [categoria, setCategoria] = useState("PLATOS");
+    const [items, setItems] = useState([]);
+    const [detalle, setDetalle] = useState([]);
+    const [dniVendedor, setDniVendedor] = useState("");
+    const [cuitCliente, setCuitCliente] = useState("");
     const [form, setForm] = useState({
         id: '',
-        detalle: [{ cantidad: '', id_item: '' }],
-        estado: '',
+        detalle: [],
+        estado: null,
         pago: '',
         cuitCliente: '',
         dniVendedor: '',
@@ -38,119 +18,107 @@ const RegistrarPedido = ({ resetForm }) => {
         credenciales: ''
     });
 
-    const [placeholders, setPlaceholders] = useState({
-        id: 'ID del Pedido',
-        estado: 'Estado',
-        pago: 'Método de Pago',
-        cuitCliente: 'CUIT del Cliente',
-        dniVendedor: 'DNI del Vendedor',
-        montoPago: 'Monto a Pagar',
-        credenciales: 'Credenciales de Pago'
-    });
+    const [errors, setErrors] = useState({});
+    const [placeholders, setPlaceholders] = useState({});
+    const [backendMessage, setBackendMessage] = useState("");
+    const [animationClass, setAnimationClass] = useState("");
 
-    const [errors, setErrors] = useState({
-        id: false,
-        estado: false,
-        pago: false,
-        cuitCliente: false,
-        dniVendedor: false,
-        montoPago: false,
-        credenciales: false
-    });
+    // Cargar ítems según categoría
+    const cargarItems = async () => {
+        try {
+            let url = "";
+            if (categoria === "PLATOS") url = `/pedido/obtenerPlatos?dniVendedor=${dniVendedor}`;
+            else if (categoria === "SIN_TACC") url = `/pedido/obtenerPlatosSinTACC?dniVendedor=${dniVendedor}`;
+            else if (categoria === "BEBIDAS") url = `/pedido/obtenerBebidas?dniVendedor=${dniVendedor}`;
+            else if (categoria === "BEBIDAS_ALCOHOLICAS") url = `/pedido/obtenerBebidasConAlcohol?dniVendedor=${dniVendedor}`;
 
-    const [backendMessage, setBackendMessage] = useState('');
-    const [animationClass, setAnimationClass] = useState('');
+            const response = await axios.get(url);
+            setItems(response.data);
+        } catch (error) {
+            console.error("Error al cargar ítems", error);
+        }
+    };
 
+    // Actualizar ítems cuando cambia la categoría
+    useEffect(() => {
+        if (dniVendedor || categoria === "PLATOS" || categoria === "BEBIDAS") cargarItems();
+    }, [categoria, dniVendedor]);
+
+    // Agregar ítem al detalle
+    const agregarItem = (item) => {
+        const existe = detalle.find((i) => i.idItem === item.idItem);
+        if (existe) {
+            setDetalle(
+                detalle.map((i) =>
+                    i.idItem === item.idItem ? { ...i, cantidad: i.cantidad + 1, precio: item.precio } : i
+                )
+            );
+        } else {
+            setDetalle([...detalle, { idItem: item.idItem, cantidad: 1, precio: item.precio }]);
+        }
+    };
+
+    // Eliminar ítem del detalle
+    const eliminarItem = (idItem) => {
+        setDetalle(detalle.filter((i) => i.idItem !== idItem));
+    };
+    const calcularMontoTotal = () => {
+        return detalle.reduce((total, item) => {
+            return total + item.cantidad * item.precio; // Retorna la suma acumulada
+        }, 0);
+    };
+
+    // Resetear formulario
     const resetFormulario = () => {
         setForm({
             id: '',
-            detalle: [{ cantidad: '', id_item: '' }],
-            estado: '',
+            detalle: [],
+            estado: null,
             pago: '',
             cuitCliente: '',
             dniVendedor: '',
             montoPago: '',
             credenciales: ''
         });
-        setErrors({
-            id: false,
-            estado: false,
-            pago: false,
-            cuitCliente: false,
-            dniVendedor: false,
-            montoPago: false,
-            credenciales: false
-        });
-        setBackendMessage('');
+        setDetalle([]);
     };
 
-    useEffect(() => {
-        if (resetForm) {
-            resetForm.current = resetFormulario;
-        }
-    }, [resetForm]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm({
-            ...form,
-            [name]: value
-        });
-        setErrors({
-            ...errors,
-            [name]: false // Resetea el estado de error al cambiar el input
-        });
-    };
-
-    const handleDetalleChange = (index, field, value) => {
-        const newDetalle = [...form.detalle];
-        newDetalle[index][field] = value;
-        setForm({ ...form, detalle: newDetalle });
-    };
-
-    const addDetalle = () => {
-        setForm({
-            ...form,
-            detalle: [...form.detalle, { cantidad: '', id_item: '' }]
-        });
-    };
-
+    // Enviar pedido
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newErrors = { ...errors };
+        // Validación de campos
+        const newErrors = {};
+        if (!form.pago) newErrors.pago = "Completa el método de pago.";
+        if (!form.cuitCliente) newErrors.cuitCliente = "Completa el CUIT del cliente.";
+        if (!form.dniVendedor) newErrors.dniVendedor = "Completa el DNI del vendedor.";
 
-        if (!form.pago) {
-            newErrors.pago = true;
-            setPlaceholders(prev => ({ ...prev, pago: "Completa el método de pago." }));
-        }
-        if (!form.cuitCliente) {
-            newErrors.cuitCliente = true;
-            setPlaceholders(prev => ({ ...prev, cuitCliente: "Completa el CUIT del cliente." }));
-        }
-        if (!form.dniVendedor) {
-            newErrors.dniVendedor = true;
-            setPlaceholders(prev => ({ ...prev, dniVendedor: "Completa el DNI del vendedor." }));
-        }
-        if (!form.montoPago) {
-            newErrors.montoPago = true;
-            setPlaceholders(prev => ({ ...prev, montoPago: "Completa el monto." }));
-        }
-
-        setErrors(newErrors);
-
-        if (Object.values(newErrors).some(error => error)) {
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
             return;
         }
+
+        // Preparar `detalle` para enviar al backend
+        const detalleFormateado = detalle.map((item) => ({
+            cantidad: item.cantidad,
+            id_item: item.idItem
+        }));
+        const montoTotal = calcularMontoTotal();
+        const formData = {
+            ...form,
+            detalle: detalleFormateado,
+            dniVendedor: dniVendedor,
+            montoPago: montoTotal
+        };
 
         try {
             const response = await fetch('/pedido/crear', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(form),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
             });
+
+            console.log(response.status, response.statusText); // Log del estado
 
             if (!response.ok) {
                 const errorMessage = await response.text();
@@ -173,98 +141,96 @@ const RegistrarPedido = ({ resetForm }) => {
     };
 
     return (
-        <div className='conteiner-reg-pedido'>
-            <div className='panel-izquierdo'>
-                <button className="back-button" onClick={goBack}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        width="32"
-                        height="32"
-                    >
-                        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
-                    </svg>
-                </button>
-
-                <h1>Por favor</h1>
-                <h2>Ingrese los datos del pedido</h2>
+        <div className="lista-items-container">
+            <div>
+                <label>DNI Vendedor: </label>
+                <input
+                    className="inputRegPedido"
+                    type="text"
+                    value={dniVendedor}
+                    onChange={(e) => {
+                        setDniVendedor(e.target.value);
+                        setForm({ ...form, dniVendedor: e.target.value });
+                    }}
+                />
+                <label>Cuit Cliente: </label>
+                <input
+                    className="inputRegPedido"
+                    type="text"
+                    value={cuitCliente}
+                    onChange={(e) => {
+                        setCuitCliente(e.target.value);
+                        setForm({ ...form, cuitCliente: e.target.value });
+                    }}
+                />
             </div>
-            <form onSubmit={handleSubmit} className='formulario'>
-                <h2>Registrar Pedido</h2>
 
-                <input
-                    type="text"
-                    name="pago"
-                    placeholder={placeholders.pago}
-                    value={form.pago}
-                    onChange={handleChange}
-                    className={`inputRegPedido ${errors.pago ? 'input-error' : ''}`}
-                />
+            {/* Categorías */}
+            <div>
+                <button onClick={() => setCategoria("PLATOS")}>PLATOS</button>
+                <button onClick={() => setCategoria("SIN_TACC")}>SIN TACC</button>
+                <button onClick={() => setCategoria("BEBIDAS")}>BEBIDAS</button>
+                <button onClick={() => setCategoria("BEBIDAS_ALCOHOLICAS")}>BEBIDAS ALCOHÓLICAS</button>
+            </div>
 
-                <input
-                    type="text"
-                    name="cuitCliente"
-                    placeholder={placeholders.cuitCliente}
-                    value={form.cuitCliente}
-                    onChange={handleChange}
-                    className={`inputRegPedido ${errors.cuitCliente ? 'input-error' : ''}`}
-                />
+            {/* Tabla de Ítems */}
+            <table className="tabla-items">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Agregar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {items.map((item) => (
+                        <tr key={item.idItem}>
+                            <td>{item.idItem}</td>
+                            <td>{item.nombre}</td>
+                            <td>${item.precio}</td>
+                            <td>
+                                <button onClick={() => agregarItem(item)}>Agregar</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
 
-                <input
-                    type="text"
-                    name="dniVendedor"
-                    placeholder={placeholders.dniVendedor}
-                    value={form.dniVendedor}
-                    onChange={handleChange}
-                    className={`inputRegPedido ${errors.dniVendedor ? 'input-error' : ''}`}
-                />
-
-                <input
-                    type="text"
-                    name="montoPago"
-                    placeholder={placeholders.montoPago}
-                    value={form.montoPago}
-                    onChange={handleChange}
-                    className={`inputRegPedido ${errors.montoPago ? 'input-error' : ''}`}
-                />
-
-                <h3>Detalle del Pedido</h3>
-                {form.detalle.map((item, index) => (
-                    <div key={index} className='detalle-item'>
-                        <input
-                            type="number"
-                            name="cantidad"
-                            placeholder="Cantidad"
-                            value={item.cantidad}
-                            onChange={handleDetalleChange}
-                            className={`inputRegPedido`}
-                        />
-                        <input
-                            type="number"
-                            name="id_item"
-                            placeholder="Id item"
-                            value={item.id_item}
-                            onChange={handleDetalleChange}
-                            className={`inputRegPedido`}
-                        />
-                    </div>
-                ))}
-                <div className='BotonesPedido'>
-                    <button className='botonRegPedido' type="submit">Crear</button>
-
-                    <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
-                </div>
-                {backendMessage == "Pedido creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
+            {/* Detalle */}
+            <h3>Detalle de Selección</h3>
+            <table className="tabla-items">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cantidad</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {detalle.map((d) => (
+                        <tr key={d.idItem}>
+                            <td>{d.idItem}</td>
+                            <td>{d.cantidad}</td>
+                            <td>
+                                <button onClick={() => eliminarItem(d.idItem)}>Eliminar</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <h4>Monto Total: ${calcularMontoTotal()}</h4>
+            {/* Formulario */}
+            <form onSubmit={handleSubmit}>
+                <label>Método de Pago:</label>
+                <input className="inputRegPedido" type="text" value={form.pago} onChange={(e) => setForm({ ...form, pago: e.target.value })} />
+                <button type="submit">Registrar Pedido</button>
             </form>
-            {showModal && (
-                <Cancelar
-                    onCancel={handleCancel}
-                    onConfirm={handleConfirmCancel}
-                />
-            )}
+
+            {/* Mensajes */}
+            {backendMessage && <p>{backendMessage}</p>}
         </div>
     );
 };
 
-export default RegistrarPedido;
+export default GeneradorItems;
