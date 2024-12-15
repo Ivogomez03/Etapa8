@@ -63,8 +63,9 @@ public class ItemMenuServicio implements IItemMenuServicio {
     }
 
     public List<ItemMenuDTO> obtenerTodosLosItemsPorVendedor(String dni) {
+        System.out.println("El dni en servicio es: " + dni);
         List<ItemMenu> items = itemMenuDAO.buscarItemsPorVendedor(dni);
-
+        System.out.println("La lista de items es: " + items);
         if (items.isEmpty()) {
             throw new IllegalArgumentException("No se encontraron items.");
         }

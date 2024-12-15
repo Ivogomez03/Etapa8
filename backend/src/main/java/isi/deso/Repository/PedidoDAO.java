@@ -11,10 +11,10 @@ import java.util.List;
 public interface PedidoDAO extends JpaRepository<Pedido, Integer> {
 
     // Consultar los pedidos de un cliente por su CUIT
-    @Query("SELECT p FROM Pedido p WHERE p.cliente.cuit = :cuitCliente")
-    List<Pedido> findPedidosByCliente(String cuitCliente);
+    @Query("SELECT p FROM Pedido p WHERE p.cliente.id = :idCliente AND cliente.habilitado = true")
+    List<Pedido> findPedidosByCliente(int idCliente);
 
     // Consultar los pedidos de un vendedor por su DNI
-    @Query("SELECT p FROM Pedido p WHERE p.vendedor.dni = :dniVendedor")
-    List<Pedido> findPedidosByVendedor(String dniVendedor);
+    @Query("SELECT p FROM Pedido p WHERE p.vendedor.id = :idVendedor AND vendedor.habilitado = true")
+    List<Pedido> findPedidosByVendedor(int idVendedor);
 }

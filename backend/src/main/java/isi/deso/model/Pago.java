@@ -5,12 +5,15 @@
 package isi.deso.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author tobir
  */
-
+@Getter
+@Setter
 @Entity
 @Table(name = "pago")
 public class Pago {

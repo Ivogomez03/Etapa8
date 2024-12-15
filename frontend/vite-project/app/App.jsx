@@ -19,6 +19,7 @@ import RegistrarPedido from './Pedido/Registrar/RegistrarPedido';
 import ModificarItem from './ItemMenu/Modificar/ModificarItem';
 import EliminarItem from './ItemMenu/Eliminar/EliminarItem';
 import BienvenidoPedido from './Pedido/BienvenidoPedido';
+import BuscarPedido from './Pedido/Buscar/BuscarPedido';
 
 
 const App = () => {
@@ -119,6 +120,7 @@ const MainApp = () => {
                 <Route path="/bienvenidoVendedor" element={<BienvenidoVendedor />} />
                 <Route path="/bienvenidoVendedor/RegistrarVendedor" element={<RegistrarVendedor />} />
                 <Route path="/bienvenidoPedido" element={<BienvenidoPedido />} />
+                <Route path="/bienvenidoPedido/BuscarPedido" element={<BuscarPedido />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/RegistrarItem" element={<RegistrarItems />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo" element={<CatalogoVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor" element={<BuscarVendedor />} />

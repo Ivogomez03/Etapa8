@@ -1,0 +1,207 @@
+/* Contenedor principal */
+.lista-pedidos-container {
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #EA044E;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px #000000;
+    color: white;
+}
+
+/* Botón de retroceso */
+.back-button {
+    position: fixed;
+    top: 35px;
+    left: 45px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button:hover {
+    color: #ffffff;
+}
+
+/* SVG */
+svg {
+    stroke-width: 2;
+    stroke: currentColor;
+}
+
+/* Título */
+.titulo {
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Controles de categorías */
+div button {
+    background-color: #ffffff;
+    color: #EA044E;
+    font-weight: bold;
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+div button:hover {
+    background-color: #EA044E;
+    color: white;
+}
+
+/* Tabla */
+.tabla-pedidos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla-pedidos thead tr {
+    background-color: #EA044E;
+    color: white;
+    text-align: left;
+}
+
+.tabla-pedidos th,
+.tabla-pedidos td {
+    padding: 12px 15px;
+    border: 1px solid #00000029;
+    border-radius: 2px;
+}
+
+.tabla-pedidos th {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.tabla-pedidos tbody tr {
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.tabla-pedidoss tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tabla-pedidos tbody tr:hover {
+    background-color: #e9f5ff;
+}
+
+.tabla-pedidos tbody tr td {
+    color: #000000;
+}
+
+.labels {
+    color: #fff;
+}
+
+/* Detalle de selección */
+h3 {
+    color: white;
+    margin-top: 20px;
+}
+
+table {
+    margin-top: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+h4 {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: white;
+}
+
+/* Formulario de pago */
+form {
+    margin-top: 20px;
+}
+
+label {
+    color: white;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.inputBuscarPedido {
+    width: 20%;
+    padding: 8px 3px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #f3f3f3;
+}
+
+.inputBuscarPedido::placeholder {
+    color: gray;
+    opacity: 1;
+}
+
+.inputBuscarPedido:focus::placeholder {
+    color: #aaa;
+}
+
+.input-error {
+    background-color: #ffe5e5;
+    /* Rojo claro */
+    border: 1px solid #ff6666;
+    /* Borde rojo suave para errores */
+}
+
+form button {
+    background-color: #fff;
+    color: #EA044E;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+form button:hover {
+    background-color: #EA044E;
+    color: white;
+}
+
+/* Botones de acción */
+.btn-accion {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-accion:focus {
+    outline: none;
+}
+
+/* Botón Eliminar */
+.btn-eliminar {
+    color: #dc3545;
+}
+
+.btn-eliminar:hover {
+    background-color: #fdeaea;
+    color: #a71d2a;
+}
+
+.tabla-items td {
+    color: #000000;
+}

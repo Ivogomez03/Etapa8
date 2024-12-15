@@ -128,7 +128,7 @@ public class ItemMenuControlador {
     @GetMapping("/itemMenu/obtenerItemsMenuPorVendedor")
     public ResponseEntity<List<ItemMenuDTO>> obtenerItemsMenuPorVendedor(
             @RequestParam(required = true) String dniVendedor) {
-
+        System.out.println(dniVendedor);
         try {
             List<ItemMenuDTO> items = imServicio.obtenerTodosLosItemsPorVendedor(dniVendedor);
             return ResponseEntity.ok(items);

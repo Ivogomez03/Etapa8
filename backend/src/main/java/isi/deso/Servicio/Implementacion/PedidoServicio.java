@@ -15,6 +15,11 @@ import isi.deso.model.Pago;
 import isi.deso.model.Pedido;
 import isi.deso.model.TipoPago;
 import isi.deso.model.Vendedor;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +67,78 @@ public class PedidoServicio implements IPedidoServicio {
         } catch (RuntimeException e) {
             throw new RuntimeException("Error al guardar el pedido");
         }
+    }
+
+    public List<PedidoDTO> obtenerPedidosPorVendedor(String dniVendedor) {
+        int idVendedor = vendedorDAO.buscarVendedorPorDni(dniVendedor).getId();
+        System.out.println("El id del vendedor es: " + idVendedor);
+        List<Pedido> pedidos = pedidoDAO.findPedidosByVendedor(idVendedor);
+        System.out.println("Los pedidos son:  " + pedidos);
+        if (pedidos.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron pedidos del vendedor con dni " + dniVendedor);
+        }
+        return pedidos.stream()
+                .map(this::convertirApedidoDTO)
+                .collect(Collectors.toList());
+
+    }
+
+    public List<PedidoDTO> obtenerPedidosPorCliente(String cuitCliente) {
+        int idCliente = clienteDAO.buscarClientePorCuit(cuitCliente).getId();
+        List<Pedido> pedidos = pedidoDAO.findPedidosByCliente(idCliente);
+        if (pedidos.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron pedidos del cliente con el cuit " + cuitCliente);
+        }
+        return pedidos.stream()
+                .map(this::convertirApedidoDTO)
+                .collect(Collectors.toList());
+
+    }
+
+    public ItemsPedidoDTO convertirAitemsPedidoDTO(ItemsPedido itemPedido) {
+        ItemsPedidoDTO itemsPedidoDTO = new ItemsPedidoDTO();
+        if (itemPedido != null) {
+            itemsPedidoDTO.setCantidad(itemPedido.getCantidad());
+            if (itemPedido.getItemMenu() != null) {
+                itemsPedidoDTO.setId_item(itemPedido.getItemMenu().getId());
+            }
+        }
+        return itemsPedidoDTO;
+    }
+
+    public PedidoDTO convertirApedidoDTO(Pedido pedido) {
+        PedidoDTO pedidoDTO = new PedidoDTO();
+
+        List<ItemsPedido> itemsPedidos = pedido.getDetalle();
+        if (itemsPedidos != null) {
+            List<ItemsPedidoDTO> itemsPedidosDTO = itemsPedidos.stream()
+                    .map(this::convertirAitemsPedidoDTO)
+                    .collect(Collectors.toList());
+            pedidoDTO.setDetalle(itemsPedidosDTO);
+        } else {
+            pedidoDTO.setDetalle(new ArrayList<>()); // Asigna una lista vacía si el detalle es nulo
+        }
+
+        if (pedido.getPago() != null) {
+            pedidoDTO.setPago(pedido.getPago().getTipoPago().name());
+            pedidoDTO.setMontoPago(pedido.getPago().getMonto());
+            pedidoDTO.setCredenciales(pedido.getPago().getCredencial());
+        }
+
+        if (pedido.getCliente() != null) {
+            pedidoDTO.setCuitCliente(pedido.getCliente().getCuit());
+        }
+
+        if (pedido.getVendedor() != null) {
+            pedidoDTO.setDniVendedor(pedido.getVendedor().getDni());
+        }
+
+        pedidoDTO.setId(pedido.getId());
+        pedidoDTO.setEstado(pedido.getEstado());
+
+        System.out.println("El pedido dto es: " + pedidoDTO);
+
+        return pedidoDTO;
     }
 
 }

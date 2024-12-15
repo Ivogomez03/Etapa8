@@ -20,6 +20,7 @@ public class ItemsPedidoServicio {
     private ClienteDAO clienteDAO;
     @Autowired
     private ItemsPedidoDAO itemsPedidoDAO;
+
     /*
      * public List<ItemsPedido> buscarPorVendedor(String dni) throws
      * ItemNoEncontradoException {

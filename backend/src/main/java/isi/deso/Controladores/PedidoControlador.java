@@ -22,6 +22,28 @@ public class PedidoControlador {
     @Autowired
     ItemMenuServicio imServicio;
 
+    @GetMapping("/pedido/obtenerPedidosPorCliente")
+    public ResponseEntity<List<PedidoDTO>> obtenerPedidosPorCliente(
+            @RequestParam(required = true) String cuitCliente) {
+        try {
+            List<PedidoDTO> pedidos = pedidoServicio.obtenerPedidosPorCliente(cuitCliente);
+            return ResponseEntity.ok(pedidos);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/pedido/obtenerPedidosPorVendedor")
+    public ResponseEntity<List<PedidoDTO>> obtenerPedidosPorVendedor(
+            @RequestParam(required = true) String dniVendedor) {
+        try {
+            List<PedidoDTO> pedidos = pedidoServicio.obtenerPedidosPorVendedor(dniVendedor);
+            return ResponseEntity.ok(pedidos);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+    }
+
     @GetMapping("/pedido/obtenerPlatos")
     public ResponseEntity<List<ItemMenuDTO>> obtenerPlatos(@RequestParam(required = true) String dniVendedor) {
         try {
