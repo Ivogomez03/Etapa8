@@ -501,17 +501,16 @@ const RegistrarItems = ({ resetForm }) => {
                     <button className='botonRegItem' type="submit" onClick={handleSubmit}>Registrar</button>
                     <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
                 </div>
-            </div>
-
-
-
-            {backendMessage == "Item creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
-            {showModal && (
+           
+           
+                {backendMessage == "Item creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
+                {showModal && (
                 <Cancelar
                     onCancel={handleCancel}
                     onConfirm={handleConfirmCancel}
                 />
             )}
+            </div>
         </div>
 
     );
