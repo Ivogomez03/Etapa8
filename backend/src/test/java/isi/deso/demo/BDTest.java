@@ -4,7 +4,6 @@
  */
 package isi.deso.demo;
 
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import util.HibernateUtil;
@@ -12,10 +11,9 @@ import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.junit.jupiter.api.Test;
 
-
 public class BDTest {
     private static final Logger logger = Logger.getLogger(BDTest.class.getName());
-    
+
     @Test
     void crearTablaTest() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();

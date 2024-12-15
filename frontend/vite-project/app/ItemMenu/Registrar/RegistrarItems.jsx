@@ -66,59 +66,23 @@ const ListaCaracteristicasPlatos = ({ form, handleChange }) => {
     )
 }
 
-const CrearCategoriaNueva = ({form, handleChange, placeholders}) =>{
+const CrearCategoriaNueva = ({ form, placeholders, handleCategoriaChange}) => {
     
-    const handleCategoriaChange = (e) => {
-        handleChange(e); // Actualiza el formulario con el valor de la nueva categoría
-    };
-
-    const [formCategoriaNueva, setForm] = useState({
-        descripcion:form.categoria,
-        tipoItem:form.tipo_item
-    });
-
-    const handleSubmitCategoria = async () => {
-        try{
-            const response = await fetch(`/categoria/crear`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formCategoriaNueva),
-            });
-            if (response.ok) {
-                alert('Categoría creada exitosamente');
-            } else {
-                alert('Error al crear la categoría');
-            }
-        }
-        catch (error) {
-            console.error('Error al enviar la categoría:', error);
-            alert('Error al enviar la categoría');
-        }
-    }
-
-
     return(
-    <div>
-        <h1>Nueva categoria</h1>  
-        <input 
-        type="text" 
-        className='descripcionCategoriaNueva'
-        placeholder={placeholders.categoria}
-        value={form.categoria}
-        onChange={handleCategoriaChange}
-        />
-        <button onClick={handleSubmitCategoria}>Crear Categoria</button>
-    </div>
-    )}
+        <div>
+            <h1>Nueva categoria</h1>  
+            <input 
+                type="text" 
+                className='descripcionCategoriaNueva'
+                placeholder={placeholders.categoria}
+                value={form.descripcion}
+                onChange={handleCategoriaChange}
+            />
+        </div>
+    )
+}
 
-const FormularioPlato = ({ form, handleChange, placeholders }) => {
-    const [isChecked, setIsChecked] = useState(false);
-
-    const handleCheckboxChange = (event) => {
-        setIsChecked(event.target.checked);
-    };
+const FormularioPlato = ({ form, handleChange, placeholders, isCheckedCategoria, handleCheckboxChange, handleCategoriaChange}) => {
 
     return (
         <form className="formulario-derecho-palto">
@@ -143,23 +107,26 @@ const FormularioPlato = ({ form, handleChange, placeholders }) => {
                 </label>
             ))}
             
-            {!isChecked && <ListaCaracteristicasPlatos form={form} handleChange={handleChange} />}
             <div>
                 <label>
                     <input 
                         type="checkbox" 
-                        checked={isChecked} 
+                        checked={isCheckedCategoria} 
                         onChange={handleCheckboxChange}
+                        className="CategoriaNuevaBox"
                     />
                     Nueva categoria
                 </label>
             </div>
-            {isChecked && <CrearCategoriaNueva form={form} handleChange={handleChange} placeholders={placeholders}/>}
+            
+            {!isCheckedCategoria && <ListaCaracteristicasPlatos form={form} handleChange={handleChange} />}
+            {isCheckedCategoria && <CrearCategoriaNueva form={form} placeholders={placeholders} handleCategoriaChange={handleCategoriaChange} />}
         </form>
     );
 };
 
-const FormularioBebida = ({ form, handleChange, placeholders }) => (
+
+const FormularioBebida = ({ form, handleChange, placeholders, isCheckedCategoria, handleCheckboxChange, handleCategoriaChange}) => (
     <form className="formulario-derecho-bebida">
         <h3 className="titulo-caracteristicas">Características de la Bebida</h3>
         <label>
@@ -189,7 +156,21 @@ const FormularioBebida = ({ form, handleChange, placeholders }) => (
             />
             Apto Vegano
         </label>
-        {ListaCaracteristicasPlatos({ form, handleChange })}
+       
+        <div>
+            <label>
+                <input 
+                    type="checkbox" 
+                    checked={isCheckedCategoria} 
+                    onChange={handleCheckboxChange}
+                    className="CategoriaNuevaBox"
+                />
+                Nueva categoria
+            </label>
+        </div>
+        {!isCheckedCategoria && <ListaCaracteristicasPlatos form={form} handleChange={handleChange}/>}
+        {isCheckedCategoria && <CrearCategoriaNueva form={form} placeholders={placeholders} handleCategoriaChange={handleCategoriaChange}/>}
+
     </form>
 );
 const RegistrarItems = ({ resetForm }) => {
@@ -230,7 +211,13 @@ const RegistrarItems = ({ resetForm }) => {
         aptoVegano: false,
         aptoVegetariano: false,
         aptoCeliaco: false,
+        CategoriaNueva:false,
     });
+
+    const [isCheckedCategoria, setIsCheckedCategoria] = useState(false);
+    const handleCheckboxChange = (event) => {
+        setIsCheckedCategoria(event.target.checked);
+    };
 
     const [placeholders, setPlaceholders] = useState({
         nombre: 'Nombre',
@@ -306,7 +293,7 @@ const RegistrarItems = ({ resetForm }) => {
         }
     }, [resetForm]);
 
-
+    
     const handleChange = (e) => {
         const { name, checked, type } = e.target;
 
@@ -314,12 +301,58 @@ const RegistrarItems = ({ resetForm }) => {
             ...prevForm,
             [name]: type === 'checkbox' ? checked : e.target.value,
         }));
+
     };
+
+    const [formCategoriaNueva, setFormCategoriaNueva] = useState({
+        descripcion: form.categoria,
+        tipoItem: form.tipo_item,
+    });
+
+    const handleCategoriaChange = (e) => {
+        const { value } = e.target;
+        
+        // Actualiza formCategoriaNueva con el nuevo valor
+        setFormCategoriaNueva((prevForm) => ({
+            ...prevForm,
+            descripcion: value,
+            tipoItem: form.tipo_item,
+        }));
+
+        // También actualiza form.categoria
+        handleChange({
+            target: {
+                name: 'categoria',
+                value: value, // Actualiza 'categoria' en el formulario global
+            }
+        });
+    };
+
+
     const handleSubmit = async (e) => {
         console.log("El dto es: ", { ...form, dniVendedor });
         e.preventDefault();
         const newErrors = { ...errors };
 
+        
+        if (isCheckedCategoria) {
+            try {
+                const response = await fetch(`/categoria/crear`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formCategoriaNueva),
+                });
+                if (!response.ok) {
+                    alert('Error al crear la categoría');
+                }
+            } catch (error) {
+                console.error('Error al enviar la categoría:', error);
+                alert('Error al enviar la categoría');
+            }
+        }
+    
         // Validaciones locales
         if (!form.nombre) {
             newErrors.nombre = true;
@@ -457,10 +490,12 @@ const RegistrarItems = ({ resetForm }) => {
             </div>
             <div className="panel-derecho">
                 {form.tipo_item === 'PLATO' && (
-                    <FormularioPlato form={form} handleChange={handleChange} placeholders={placeholders} />
+                    <FormularioPlato form={form} handleChange={handleChange} placeholders={placeholders} isCheckedCategoria={isCheckedCategoria} 
+                    handleCheckboxChange={handleCheckboxChange} handleCategoriaChange={handleCategoriaChange}/>
                 )}
                 {form.tipo_item === 'BEBIDA' && (
-                    <FormularioBebida form={form} handleChange={handleChange} placeholders={placeholders} />
+                    <FormularioBebida form={form} handleChange={handleChange} placeholders={placeholders} isCheckedCategoria={isCheckedCategoria} 
+                    handleCheckboxChange={handleCheckboxChange} handleCategoriaChange={handleCategoriaChange}/>
                 )}
                 <div className='BotonesItems'>
                     <button className='botonRegItem' type="submit" onClick={handleSubmit}>Registrar</button>

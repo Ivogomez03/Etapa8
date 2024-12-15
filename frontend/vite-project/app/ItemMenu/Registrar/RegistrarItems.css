@@ -103,6 +103,24 @@ input[type="radio"] {
   margin-top: 5px;
 }
 
+form .formulario-derecho-palto label {
+  display: block; /* Los checkboxes se alinean verticalmente */
+  margin-bottom: 10px; /* Espacio entre los checkboxes */
+}
+
+form .formulario-derecho-palto input[type="checkbox"] {
+  margin-right: 10px; /* Espacio a la derecha del checkbox */
+}
+
+form .formulario-derecho-palto div {
+  display: flex; /* Usa flexbox para alinear los elementos */
+  align-items: center; /* Centra verticalmente el checkbox y la etiqueta */
+}
+
+form .CategoriaNuevaBox {
+  margin-right: 5px; /* Espacio entre el checkbox y la etiqueta */
+}
+
 input[type="checkbox"],
 input[type="radio"] {
   margin-right: 10px;
