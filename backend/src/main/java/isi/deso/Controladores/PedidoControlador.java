@@ -22,7 +22,8 @@ public class PedidoControlador {
     @Autowired
     ItemMenuServicio imServicio;
 
-    public ResponseEntity<List<ItemMenuDTO>> obtenerPlatos(String dniVendedor) {
+    @GetMapping("/pedido/obtenerPlatos")
+    public ResponseEntity<List<ItemMenuDTO>> obtenerPlatos(@RequestParam(required = true) String dniVendedor) {
         try {
             List<ItemMenuDTO> platos = imServicio.obtenerPlatos(dniVendedor);
             return ResponseEntity.ok(platos);
@@ -31,6 +32,7 @@ public class PedidoControlador {
         }
     }
 
+    @GetMapping("/pedido/obtenerPlatosSinTACC")
     public ResponseEntity<List<ItemMenuDTO>> obtenerPlatosSinTACC(@RequestParam(required = true) String dniVendedor) {
         try {
             List<ItemMenuDTO> platosSinTACC = imServicio.obtenerPlatosSinTACC(dniVendedor);
@@ -72,6 +74,17 @@ public class PedidoControlador {
         }
     }
 
+    @GetMapping("/pedido/obtenerBebidas")
+    public ResponseEntity<List<ItemMenuDTO>> obtenerBebidas(
+            @RequestParam(required = true) String dniVendedor) {
+        try {
+            List<ItemMenuDTO> bebidas = imServicio.obtenerBebidas(dniVendedor);
+            return ResponseEntity.ok(bebidas);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+    }
+
     @GetMapping("/pedido/obtenerBebidasSinAlcohol")
     public ResponseEntity<List<ItemMenuDTO>> obtenerBebidasSinAlcohol(
             @RequestParam(required = true) String dniVendedor) {
@@ -85,7 +98,7 @@ public class PedidoControlador {
     }
 
     @PostMapping("/pedido/crear")
-    public ResponseEntity<String> CrearPedido(@RequestBody PedidoDTO pedidoDTO) {
+    public ResponseEntity<String> crearPedido(@RequestBody PedidoDTO pedidoDTO) {
         try {
             pedidoServicio.crearPedido(pedidoDTO);
             return ResponseEntity.ok("El pedido ha sido creado correctamente.");

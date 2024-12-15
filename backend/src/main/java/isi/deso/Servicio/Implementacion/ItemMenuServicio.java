@@ -132,6 +132,16 @@ public class ItemMenuServicio implements IItemMenuServicio {
                 .collect(Collectors.toList());
     }
 
+    public List<ItemMenuDTO> obtenerBebidas(String dniVendedor) {
+        List<Bebida> bebidas = bebidaDAO.findBebidas(dniVendedor);
+        if (bebidas.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron bebidas del vendedor con dni " + dniVendedor);
+        }
+        return bebidas.stream()
+                .map(this::convertirAimDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<ItemMenuDTO> obtenerPlatosSinTACC(String dniVendedor) {
         List<Plato> platos = platoDAO.obtenerPlatosSinTACC(dniVendedor);
         if (platos.isEmpty()) {

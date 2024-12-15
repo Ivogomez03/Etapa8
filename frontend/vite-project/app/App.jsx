@@ -18,6 +18,7 @@ import CatalogoVendedor from './Vendedor/Catalogo/CatalogoVendedor';
 import RegistrarPedido from './Pedido/Registrar/RegistrarPedido';
 import ModificarItem from './ItemMenu/Modificar/ModificarItem';
 import EliminarItem from './ItemMenu/Eliminar/EliminarItem';
+import BienvenidoPedido from './Pedido/BienvenidoPedido';
 
 
 const App = () => {
@@ -29,6 +30,9 @@ const App = () => {
     }
     const goToBienvenidoCliente = () => {
         navigate('/bienvenidoCliente');
+    }
+    const goToBienvenidoPedido = () => {
+        navigate('/bienvenidoPedido');
     }
 
     return (
@@ -46,7 +50,7 @@ const App = () => {
                         <button className="botones-navegacion" onClick={goToBienvenidoCliente}>
                             Clientes
                         </button>
-                        <button className="botones-navegacion">
+                        <button className="botones-navegacion" onClick={goToBienvenidoPedido}>
                             Pedidos
                         </button>
                     </div>
@@ -114,10 +118,11 @@ const MainApp = () => {
                 <Route path="/" element={<App />} />
                 <Route path="/bienvenidoVendedor" element={<BienvenidoVendedor />} />
                 <Route path="/bienvenidoVendedor/RegistrarVendedor" element={<RegistrarVendedor />} />
+                <Route path="/bienvenidoPedido" element={<BienvenidoPedido />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/RegistrarItem" element={<RegistrarItems />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo" element={<CatalogoVendedor />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor" element={<BuscarVendedor />} />
-                <Route path="/bienvenidoVendedor/RegistrarPedido" element={<RegistrarPedido />} />
+                <Route path="/bienvenidoPedido/RegistrarPedido" element={<RegistrarPedido />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo/ModificarItem" element={<ModificarItem />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/Catalogo/EliminarItem" element={<EliminarItem />} />
                 <Route path="/bienvenidoVendedor/BuscarVendedor/VendedorBuscado" element={<VendedorBuscado />} />
