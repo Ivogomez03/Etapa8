@@ -9,7 +9,7 @@ const VendedorBuscado = () => {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/bienvenidoVendedor/BuscarVendedor"); // Navega hacia la página anterior
     };
 
 

@@ -6,7 +6,7 @@ import Cancelar from '../../Cancelar/Cancelar';
 const EliminarItem = ({ resetForm }) => {
     const navigate = useNavigate();
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/bienvenidoVendedor/BuscarVendedor"); // Navega hacia la página anterior
     };
 
 
@@ -50,6 +50,7 @@ const EliminarItem = ({ resetForm }) => {
             const result = await response.text(); // Mensaje de éxito
             console.log('Éxito:', result);
             alert(result); // O redirigir si es necesario
+            goBack();
 
         } catch (error) {
             console.error('Error al enviar el formulario:', error);

@@ -6,7 +6,7 @@ const BienvenidoCliente = () => {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/"); // Navega hacia la página anterior
     };
 
     const goToBuscarCliente = () => {
@@ -20,7 +20,7 @@ const BienvenidoCliente = () => {
     return (
 
         <div className='conteiner-bienvenido-cliente'>
-            
+
             <div className='ventanaTransparente-bienvenido-cliente'>
                 <button className="back-button" onClick={goBack}>
                     <svg

@@ -15,7 +15,7 @@ const RegistrarCliente = ({ resetForm }) => {
     const onlyNumbers = (str) => /^[0-9]*$/.test(str);
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/bienvenidoCliente"); // Navega hacia la página anterior
     };
 
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
@@ -177,7 +177,7 @@ const RegistrarCliente = ({ resetForm }) => {
 
     return (
         <div className='conteiner-reg-cliente'>
-            <div className='panel-izquierdo'>
+            <div className='panel-izquierdo-cliente'>
                 <button className="back-button" onClick={goBack}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -195,7 +195,7 @@ const RegistrarCliente = ({ resetForm }) => {
                 <h1>Por favor</h1>
                 <h2>Ingrese los datos solicitados</h2>
             </div>
-            <form onSubmit={handleSubmit} className='formulario'>
+            <form onSubmit={handleSubmit} className='formulario-cliente'>
                 <h2>Registrar Cliente</h2>
 
                 <input

@@ -8,7 +8,7 @@ const BuscarCliente = ({ resetForm }) => {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/bienvenidoCliente"); // Navega hacia la página anterior
     };
 
     const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);

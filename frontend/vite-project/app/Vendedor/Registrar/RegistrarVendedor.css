@@ -7,7 +7,7 @@
     height: 100vh;
 }
 
-.panel-izquierdo {
+.panel-izquierdo-vendedor {
     position: relative;
     width: 40%;
     height: 100%;
@@ -22,7 +22,7 @@
     animation: slideIn 1s ease-out forwards;
 }
 
-.panel-izquierdo h2 {
+.panel-izquierdo-vendedor h2 {
     font-size: 24px;
     color: white;
 }
@@ -53,7 +53,7 @@ svg {
     /* Asegura que tome el color actual */
 }
 
-.formulario {
+.formulario-vendedor {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -65,7 +65,7 @@ svg {
     animation: slideInRight 1s ease-out forwards;
 }
 
-h2 {
+.formulario-vendedor h2 {
     margin-top: 30px;
     font-size: 32px;
     margin-bottom: 20px;

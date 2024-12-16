@@ -8,7 +8,7 @@ const ClienteBuscado = () => {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/bienvenidoCliente/BuscarCliente"); // Navega hacia la página anterior
     };
 
 

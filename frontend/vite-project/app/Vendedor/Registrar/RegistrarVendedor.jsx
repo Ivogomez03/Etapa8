@@ -12,12 +12,8 @@ const RegistrarVendedor = ({ resetForm }) => {
     const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
     const onlyNumbers = (str) => /^[0-9]*$/.test(str);
 
-    const goToLogin = () => {
-        navigate('/login');
-    };
-
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/bienvenidoVendedor"); // Navega hacia la página anterior
     };
 
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
@@ -37,8 +33,8 @@ const RegistrarVendedor = ({ resetForm }) => {
 
         console.log("Formulario cancelado");
     };
-    
-    const goToRegistrarItem = () =>{
+
+    const goToRegistrarItem = () => {
         navigate('./registrarItems')
     }
 
@@ -204,7 +200,7 @@ const RegistrarVendedor = ({ resetForm }) => {
 
     return (
         <div className='conteiner-reg-vendedor'>
-            <div className='panel-izquierdo'>
+            <div className='panel-izquierdo-vendedor'>
                 <button className="back-button" onClick={goBack}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +218,7 @@ const RegistrarVendedor = ({ resetForm }) => {
                 <h1>Por favor</h1>
                 <h2>Ingrese los datos solicitados</h2>
             </div>
-            <form onSubmit={handleSubmit} className='formulario'>
+            <form onSubmit={handleSubmit} className='formulario-vendedor'>
                 <h2>Registrar Vendedor</h2>
 
                 <input

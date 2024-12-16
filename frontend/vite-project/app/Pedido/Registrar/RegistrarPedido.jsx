@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { HashRouter, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import './RegistrarPedido.css'
 const GeneradorItems = () => {
+    const navigate = useNavigate();
     const [categoria, setCategoria] = useState("PLATOS");
     const [items, setItems] = useState([]);
     const [detalle, setDetalle] = useState([]);
@@ -82,6 +84,10 @@ const GeneradorItems = () => {
         });
         setDetalle([]);
     };
+    const goBack = () => {
+        navigate("/bienvenidoPedido"); // Navega hacia la página anterior
+    };
+
 
     // Enviar pedido
     const handleSubmit = async (e) => {
@@ -142,6 +148,11 @@ const GeneradorItems = () => {
 
     return (
         <div className="lista-items-container">
+            <button className="back-button" onClick={goBack}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
+                </svg>
+            </button>
             <div>
                 <label>DNI Vendedor: </label>
                 <input

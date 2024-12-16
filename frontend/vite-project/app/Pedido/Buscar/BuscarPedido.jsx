@@ -13,7 +13,7 @@ const BuscarPedido = () => {
     const [mostrarCuitInput, setMostrarCuitInput] = useState(false); // Controla la visibilidad del input CUIT
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/bienvenidoPedido"); // Navega hacia la página anterior
     };
 
     // Resetear formulario
